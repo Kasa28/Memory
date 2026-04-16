@@ -1,0 +1,37 @@
+.memory-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero {
+  min-height: 100vh;
+  background-color: #2f3131;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  padding: 80px;
+}
+
+.hero__title {
+  font-size: 5rem;
+  color: white;
+}
+
+.settings {
+  display: flex;
+  gap: 48px;
+  padding: 80px;
+  background: #f5f3ef;
+}
+
+.game {
+  padding: 80px;
+}
+
+.game__board {
+  display: grid;
+  grid-template-columns: repeat(4, 100px);
+  gap: 16px;
+  justify-content: center;
+}
