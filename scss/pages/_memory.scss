@@ -1,5 +1,5 @@
 .is-hidden {
-  display: none;
+  display: none !important;
 }
 
 .memory-page {
@@ -88,22 +88,19 @@
     }
   }
 
-&__bg-icon {
-  position: absolute;
-  left: -30px;
-  bottom: -20px;
-  width: 340px;
-
-  opacity: 1.2;
-
-  filter: 
-    sepia(1)
-    hue-rotate(35deg)
-    saturate(3)
-    brightness(1.2);
-
-  pointer-events: none;
-}
+  &__bg-icon {
+    position: absolute;
+    left: -30px;
+    bottom: -20px;
+    width: 340px;
+    opacity: 1.12;
+    filter:
+      sepia(1)
+      hue-rotate(35deg)
+      saturate(3)
+      brightness(1.2);
+    pointer-events: none;
+  }
 }
 
 .settings {
@@ -124,22 +121,48 @@
     margin-bottom: 40px;
   }
 
+  &__heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 2rem;
+    margin-bottom: 16px;
+  }
+
+  &__icon {
+    width: 22px;
+    height: 22px;
+    display: block;
+  }
+
   &__group {
     margin-bottom: 40px;
-
-    h3 {
-      font-size: 2rem;
-      margin-bottom: 16px;
-    }
-
-    label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-      font-size: 1.2rem;
-    }
   }
+
+  &__option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+  cursor: pointer;
+
+  span {
+    display: inline-block;
+  }
+}
+
+&__indicator {
+  display: none;
+  width: 46px;
+  height: auto;
+  margin-left: 6px;
+  pointer-events: none;
+}
+
+&__option input:checked ~ .settings__indicator {
+  display: block;
+}
 
   &__right {
     flex: 1;
@@ -151,8 +174,11 @@
   &__preview {
     min-height: 360px;
     border-radius: 20px;
-    background: #ddd6cc;
     margin-bottom: 24px;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   &__summary {
@@ -233,6 +259,11 @@
   .settings {
     padding: 40px 24px;
     flex-direction: column;
+
+    &__indicator {
+      right: 0;
+      width: 34px;
+    }
 
     &__summary {
       flex-wrap: wrap;
