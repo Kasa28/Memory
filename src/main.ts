@@ -36,23 +36,46 @@ function setupCardFlip(): void {
 function setupSettings(): void {
   setupThemePreview();
   setupSummary();
+  updatePreview();
+  updateSummary();
+  updateStartButton();
 }
 
 function setupThemePreview(): void {
   const radios = getRadios("theme");
-  radios.forEach((radio) => radio.addEventListener("change", updatePreview));
-  updatePreview();
+  radios.forEach((radio) =>
+    radio.addEventListener("change", () => {
+      updatePreview();
+      updateSummary();
+      updateStartButton();
+    })
+  );
 }
 
 function setupSummary(): void {
-  const names = ["theme", "player", "size"];
+  const names = ["player", "size"];
   names.forEach((name) => addSummaryListeners(name));
-  updateSummary();
 }
 
 function addSummaryListeners(name: string): void {
   const radios = getRadios(name);
-  radios.forEach((radio) => radio.addEventListener("change", updateSummary));
+  radios.forEach((radio) =>
+    radio.addEventListener("change", () => {
+      updateSummary();
+      updateStartButton();
+    })
+  );
+}
+
+function updateStartButton(): void {
+  const startBtn = document.getElementById("startBtn") as HTMLButtonElement | null;
+  if (!startBtn) return;
+
+  const theme = getCheckedValue("theme");
+  const player = getCheckedValue("player");
+  const size = getCheckedValue("size");
+
+  startBtn.disabled = !(theme && player && size);
 }
 
 function getRadios(name: string): HTMLInputElement[] {
