@@ -51,7 +51,7 @@
             </h3>
 
             <label class="settings__option">
-              <input type="radio" name="player" value="blue"/>
+              <input type="radio" name="player" value="blue" />
               <span>Blue</span>
               <img src="/Line.svg" class="settings__indicator" alt="" />
             </label>
@@ -103,40 +103,69 @@
 
       <section class="game is-hidden" id="game">
         <div class="game__topbar">
-          <div class="game__score">6</div>
-          <div class="game__current-player">Current player: Blue</div>
-          <button class="game__exit">Exit game</button>
+          <div class="game__scores">
+            <div class="game__score-box">
+              <img id="orangeScoreIcon" alt="" class="game__score-icon" />
+              <span id="orangeScore">0</span>
+            </div>
+
+            <div class="game__score-box">
+              <img id="blueScoreIcon" alt="" class="game__score-icon" />
+              <span id="blueScore">0</span>
+            </div>
+          </div>
+
+          <div class="game__current-player">
+            <span>Current player:</span>
+            <img id="currentPlayerIcon" class="game__player-icon" alt="" />
+          </div>
+
+          <button class="game__exit" id="exitGameBtn">Exit game</button>
         </div>
 
-        <section class="game__board" id="field">
-          <button class="card">
-            <div class="card__inner">
-              <div class="card__face card__face--front"></div>
-              <div class="card__face card__face--back"></div>
-            </div>
-          </button>
+        <section class="game__board" id="field"></section>
 
-          <button class="card">
-            <div class="card__inner">
-              <div class="card__face card__face--front"></div>
-              <div class="card__face card__face--back"></div>
-            </div>
-          </button>
+        <div class="game__modal is-hidden" id="exitModal">
+          <div class="game__modal-box">
+            <p class="game__modal-text">Are you sure you want to quit the game?</p>
 
-          <button class="card">
-            <div class="card__inner">
-              <div class="card__face card__face--front"></div>
-              <div class="card__face card__face--back"></div>
-            </div>
-          </button>
+            <div class="game__modal-actions">
+              <button class="game__modal-cancel" id="cancelExitBtn">
+                No, back to game
+              </button>
 
-          <button class="card">
-            <div class="card__inner">
-              <div class="card__face card__face--front"></div>
-              <div class="card__face card__face--back"></div>
+              <button class="game__modal-confirm" id="confirmExitBtn">
+                Yes, quit game
+              </button>
             </div>
-          </button>
-        </section>
+          </div>
+        </div>
+
+        <div class="game__result is-hidden" id="gameEndScreen">
+          <div class="game__result-box game__result-box--end" id="gameEndBox">
+            <h2 class="game__result-title">GAME END</h2>
+            <p class="game__result-subtitle">Final score</p>
+
+            <div class="game__result-score">
+              <img id="resultBlueIcon" class="game__result-icon" alt="" />
+              <span id="resultBlueScore">0</span>
+              <span>-</span>
+              <span id="resultOrangeScore">0</span>
+              <img id="resultOrangeIcon" class="game__result-icon" alt="" />
+            </div>
+          </div>
+        </div>
+
+        <div class="game__result is-hidden" id="winnerScreen">
+          <div class="game__result-box game__result-box--winner" id="winnerBox">
+            <p class="game__winner-subtitle">The winner is</p>
+            <h2 class="game__winner-title" id="winnerTitle">Blue Player</h2>
+
+            <img id="winnerIcon" src="/trophy.svg" alt="" class="game__winner-icon" />
+
+            <button class="game__winner-home" id="winnerHomeBtn">Home</button>
+          </div>
+        </div>
       </section>
     </main>
 

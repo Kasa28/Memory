@@ -30,3 +30,33 @@
     transform: rotateY(180deg);
   }
 }
+
+.game__scores {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.game__score-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.game__score-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.game__current-player {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.game__player-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}

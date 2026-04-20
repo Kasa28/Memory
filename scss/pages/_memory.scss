@@ -312,3 +312,452 @@
     width: 100%;
   }
 }
+
+.game {
+  min-height: 100vh;
+  padding: 60px 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: #f8f5e8;
+
+  &.theme-gaming-board {
+    background:
+      radial-gradient(circle at top, rgba(117, 219, 255, 0.28) 0%, rgba(117, 219, 255, 0) 28%),
+      linear-gradient(180deg, #1f5a6a 0%, #123844 100%);
+  }
+
+  &.theme-foods-board {
+    background: #f8f5e8;
+  }
+
+  &__topbar {
+    width: 100%;
+    max-width: 1100px;
+    min-height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 26px;
+    margin-bottom: 48px;
+    border-radius: 20px;
+    box-sizing: border-box;
+  }
+
+  &__scores {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 16px;
+    border-radius: 12px;
+  }
+
+  &__score-box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  &__score-icon,
+  &__player-icon {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    display: block;
+  }
+
+  &__current-player {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  &__exit {
+    min-width: 132px;
+    height: 46px;
+    padding: 0 18px;
+    border-radius: 12px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 120ms ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    img {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+      display: block;
+    }
+  }
+
+  &__board {
+    display: grid;
+    grid-template-columns: repeat(4, 110px);
+    gap: 18px;
+    justify-content: center;
+    width: 100%;
+    max-width: 520px;
+  }
+
+  &__modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(0, 0, 0, 0.18);
+  }
+
+  &__modal-box {
+    width: min(100%, 480px);
+    min-height: 220px;
+    border-radius: 22px;
+    padding: 36px 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 26px;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  &__modal-text {
+    margin: 0;
+    font-size: 2.2rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  &__modal-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  &__modal-cancel,
+  &__modal-confirm {
+    min-width: 150px;
+    height: 42px;
+    border-radius: 10px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  &__result {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__result-box {
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 60px 24px;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  &__result-title {
+    margin: 0;
+    font-size: clamp(5rem, 8vw, 8rem);
+    line-height: 1;
+    font-weight: 800;
+  }
+
+  &__result-subtitle {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  &__result-score {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 2.2rem;
+    font-weight: 700;
+    padding: 10px 16px;
+    border-radius: 12px;
+  }
+
+  &__result-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+  }
+
+  &__winner-subtitle {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  &__winner-title {
+    margin: 0;
+    font-size: clamp(4rem, 7vw, 6.8rem);
+    line-height: 1;
+    font-weight: 800;
+  }
+
+  &__winner-icon {
+    width: min(220px, 30vw);
+    height: auto;
+    object-fit: contain;
+    display: block;
+    padding: 18px;
+  }
+
+  &__winner-home {
+    min-width: 110px;
+    height: 46px;
+    border-radius: 10px;
+    font-size: 1.6rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 120ms ease-in-out;
+  }
+}
+
+.game.theme-gaming-board {
+  .game__topbar {
+    background: rgba(234, 229, 208, 0.12);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+  }
+
+  .game__scores {
+    background: #f3f0df;
+  }
+
+  .game__score-box:first-child {
+    color: #ff7a3d;
+  }
+
+  .game__score-box:last-child {
+    color: #53cfff;
+  }
+
+  .game__current-player {
+    color: #f6f2e8;
+  }
+
+  .game__exit {
+    border: 2px solid #ff4ea3;
+    background: rgba(20, 40, 48, 0.25);
+    color: #f6f2e8;
+    box-shadow: 0 0 0 1px rgba(255, 78, 163, 0.08);
+  }
+
+  .game__exit:hover {
+    background: rgba(20, 40, 48, 0.38);
+  }
+
+  .game__modal {
+    background: rgba(5, 20, 28, 0.38);
+  }
+
+  .game__modal-box {
+    background: #f7efc9;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
+  }
+
+  .game__modal-text {
+    color: #21454f;
+  }
+
+  .game__modal-cancel {
+    border: none;
+    background: #ff2f8f;
+    color: #fff7ea;
+  }
+
+  .game__modal-confirm {
+    border: 2px solid #ef6a3a;
+    background: transparent;
+    color: #ef6a3a;
+  }
+}
+
+.game.theme-foods-board {
+  .game__topbar {
+    background: rgba(223, 215, 203, 0.55);
+  }
+
+  .game__scores {
+    background: #f5eee3;
+  }
+
+  .game__score-box:first-child {
+    color: #ef6a3a;
+  }
+
+  .game__score-box:last-child {
+    color: #1d63b8;
+  }
+
+  .game__current-player {
+    color: #8c7868;
+  }
+
+  .game__exit {
+    border: 2px solid #d99a73;
+    background: transparent;
+    color: #d99a73;
+  }
+
+  .game__modal-box {
+    background: #fff4df;
+  }
+
+  .game__modal-text {
+    color: #8b5d45;
+  }
+
+  .game__modal-cancel {
+    border: none;
+    background: #ff5c8a;
+    color: #fff7ea;
+  }
+
+  .game__modal-confirm {
+    border: 2px solid #ef6a3a;
+    background: transparent;
+    color: #ef6a3a;
+  }
+}
+
+.theme-gaming {
+  background:
+    radial-gradient(circle at top, rgba(117, 219, 255, 0.28) 0%, rgba(117, 219, 255, 0) 35%),
+    linear-gradient(180deg, #1f5a6a 0%, #123844 100%);
+  color: #f6f2e8;
+}
+
+.theme-gaming .game__result-title {
+  color: #ff2f8f;
+}
+
+.theme-gaming .game__result-subtitle,
+.theme-gaming .game__winner-subtitle {
+  color: #f6f2e8;
+}
+
+.theme-gaming .game__result-score {
+  background: #f3f0df;
+  color: #17333c;
+}
+
+.theme-gaming .game__winner-icon {
+  background: transparent;
+}
+
+.theme-gaming .game__winner-home {
+  border: 2px solid #ff4ea3;
+  background: transparent;
+  color: #f6f2e8;
+}
+
+.theme-foods {
+  background: linear-gradient(180deg, #ff8248 0%, #ef6936 100%);
+  color: #fff7ea;
+}
+
+.theme-foods .game__result-title {
+  color: #fff7ea;
+}
+
+.theme-foods .game__result-subtitle {
+  color: #fff7ea;
+}
+
+.theme-foods .game__result-score {
+  background: #fff3e2;
+  color: #84411f;
+}
+
+.theme-foods-blue,
+.theme-foods-orange,
+.theme-foods-draw {
+  background: #f8f5e8;
+}
+
+.theme-foods-blue .game__winner-subtitle,
+.theme-foods-orange .game__winner-subtitle,
+.theme-foods-draw .game__winner-subtitle {
+  color: #b6846f;
+}
+
+.theme-foods-blue .game__winner-icon,
+.theme-foods-orange .game__winner-icon,
+.theme-foods-draw .game__winner-icon {
+  background: #f7e8e4;
+}
+
+.theme-foods-blue .game__winner-home,
+.theme-foods-orange .game__winner-home,
+.theme-foods-draw .game__winner-home {
+  border: none;
+  background: #ef6a3a;
+  color: #fff7ea;
+}
+
+.winner-title-blue {
+  color: #3dbdff;
+}
+
+.winner-title-orange {
+  color: #ff7a3d;
+}
+
+.winner-title-draw {
+  color: #d2a94d;
+}
+
+.theme-foods-blue .winner-title-blue {
+  color: #1d63b8;
+}
+
+.theme-foods-orange .winner-title-orange {
+  color: #ef6a3a;
+}
+
+.theme-foods-draw .winner-title-draw {
+  color: #b48a39;
+}
+
+.theme-gaming .winner-title-blue {
+  color: #53cfff;
+  text-shadow: 0 0 18px rgba(83, 207, 255, 0.22);
+}
+
+.theme-gaming .winner-title-orange {
+  color: #ff7440;
+  text-shadow: 0 0 18px rgba(255, 116, 64, 0.22);
+}
+
+.theme-gaming .winner-title-draw {
+  color: #ffd36a;
+}
