@@ -20,12 +20,8 @@
     backface-visibility: hidden;
     border-radius: 8px;
 
-    &--front {
-      background-color: orange;
-    }
 
     &--back {
-      background-color: red;
       transform: rotateY(180deg);
     }
   }
