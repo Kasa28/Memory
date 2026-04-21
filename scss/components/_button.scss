@@ -316,6 +316,7 @@
     &-text {
       color: #f6f2ee;
       font-family: "Orbitron", sans-serif;
+      font-size: 1rem;
     }
 
     &:hover {
@@ -746,4 +747,12 @@
       font-size: 12px;
     }
   }
+}
+
+#orangeScore {
+  color: #ff7a00;
+}
+
+#blueScore {
+  color: #1296f3;
 }
