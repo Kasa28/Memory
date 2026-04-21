@@ -106,8 +106,10 @@ function updateScoreIcons(): void {
   const orange = getImage("orangeScoreIcon");
   const blue = getImage("blueScoreIcon");
   if (!orange || !blue) return;
-  orange.src = getPlayerIcon("orange");
-  blue.src = getPlayerIcon("blue");
+  orange.src = getScoreIcon("orange");
+  blue.src = getScoreIcon("blue");
+  orange.alt = "Orange score";
+  blue.alt = "Blue score";
 }
 
 function getImage(id: string): HTMLImageElement | null {
@@ -118,6 +120,12 @@ function getPlayerIcon(player: string): string {
   const base = import.meta.env.BASE_URL;
   if (player === "orange") return `${base}currentOrange.svg`;
   return `${base}blue_play.svg`;
+}
+
+function getScoreIcon(player: string): string {
+  const base = import.meta.env.BASE_URL;
+  if (player === "orange") return `${base}orange_player.svg`;
+  return `${base}blue_player.svg`;
 }
 
 function getFoodsWinnerIcon(player: string): string {
