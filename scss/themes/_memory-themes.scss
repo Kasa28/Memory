@@ -43,7 +43,7 @@
     color: #a45212;
     font-family: "Klee One", cursive;
     font-weight: 600;
-    font-size: 2.8rem;
+    font-size: 1.8rem;
     line-height: 4rem;
     text-align: center;
   }
@@ -177,4 +177,140 @@
 
 .theme-gaming .winner-title-draw {
   color: #ffd36a;
+}
+
+
+
+.theme-gaming-board {
+  #gameEndScreen,
+  #winnerScreen {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100dvh;
+    padding: 0;
+    background: #2d586b;
+    z-index: 300;
+  }
+
+  #gameEndBox,
+  #winnerBox {
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    min-height: 100dvh;
+    padding: 48px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #2d586b;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .game__result-title {
+    margin: 0 0 72px;
+    color: #ff197d;
+    font-family: "Orbitron", sans-serif;
+    font-size: clamp(64px, 10vw, 120px);
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .game__result-subtitle,
+  .game__winner-subtitle {
+    margin: 0 0 18px;
+    color: #ffffff;
+    font-family: "Orbitron", sans-serif;
+    font-size: clamp(22px, 3vw, 34px);
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .game__result-score {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+    border-radius: 8px;
+    background: #f0f0f0;
+  }
+
+  .game__result-icon {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+  }
+
+  #resultOrangeScore,
+  #resultBlueScore {
+    font-family: "Orbitron", sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  #resultOrangeScore {
+    color: #ff7a00;
+  }
+
+  #resultBlueScore {
+    color: #18a0fb;
+  }
+
+  .game__winner-title {
+    margin: 0 0 26px;
+    font-family: "Orbitron", sans-serif;
+    font-size: clamp(42px, 6vw, 72px);
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+  }
+
+  .game__winner-title.winner-blue {
+    color: #18a0fb;
+  }
+
+  .game__winner-title.winner-orange {
+    color: #ff7a00;
+  }
+
+  .game__winner-title.winner-draw {
+    color: #ffffff;
+  }
+
+  .game__winner-icons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 240px;
+    margin-bottom: 24px;
+  }
+
+  .game__winner-icon {
+    width: min(240px, 42vw);
+    height: auto;
+    object-fit: contain;
+  }
+
+  .game__winner-home {
+    min-width: 90px;
+    height: 34px;
+    padding: 0 14px;
+    border: 2px solid #ff197d;
+    border-radius: 6px;
+    background: transparent;
+    color: #ffffff;
+    font-family: "Orbitron", sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .game__winner-home:hover {
+    background: #ff197d;
+  }
 }

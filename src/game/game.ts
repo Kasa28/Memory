@@ -5,7 +5,8 @@ import {
   addPoint,
   getWinner,
   getWinnerText,
-  getScores
+  updateWinnerDisplay,
+  updateResultDisplay
 } from "./state";
 
 let firstCard: HTMLButtonElement | null = null;
@@ -35,19 +36,16 @@ function setupCardFlip(): void {
 }
 
 function handleCardClick(e: Event): void {
-  const t = e.target as HTMLElement;
-  const card = t.closest(".card") as HTMLButtonElement | null;
-  if (!canFlip(card)) return;
+  const target = e.target as HTMLElement;
+  const card = target.closest(".card") as HTMLButtonElement | null;
+  if (!card || !isCardClickable(card)) return;
   flipCard(card);
   saveCard(card);
   checkTurn();
 }
 
-function canFlip(card: HTMLButtonElement | null): boolean {
-  if (!card) return false;
-  if (lockBoard) return false;
-  if (card === firstCard) return false;
-  return !card.classList.contains("matched");
+function isCardClickable(card: HTMLButtonElement): boolean {
+  return !lockBoard && card !== firstCard && !card.classList.contains("matched");
 }
 
 function flipCard(card: HTMLButtonElement): void {
@@ -105,54 +103,45 @@ function showEndFlow(): void {
 }
 
 function showFoodsEnd(): void {
-  fillEndScores();
-  showScreen("gameEndScreen");
-  setTimeout(hideEndAndShowWinner, 5000);
-}
+  updateResultDisplay();
+  document.getElementById("gameEndScreen")?.classList.remove("is-hidden");
 
-function hideEndAndShowWinner(): void {
-  hideScreen("gameEndScreen");
-  showWinner();
-}
-
-function fillEndScores(): void {
-  const s = getScores();
-  setText("resultBlueScore", s.blue);
-  setText("resultOrangeScore", s.orange);
-  setImg("resultBlueIcon", getPlayerIcon("blue"));
-  setImg("resultOrangeIcon", getPlayerIcon("orange"));
+  setTimeout(() => {
+    document.getElementById("gameEndScreen")?.classList.add("is-hidden");
+    showWinner();
+  }, 5000);
 }
 
 function showWinner(): void {
-  setWinnerText();
-  setWinnerTheme();
-  fillWinnerIcons();
-  showScreen("winnerScreen");
+  updateWinnerDisplay();
+  toggleWinnerLayout();
+  fillWinnerVisuals();
+  document.getElementById("winnerScreen")?.classList.remove("is-hidden");
 }
 
-function setWinnerText(): void {
-  const title = document.getElementById("winnerTitle");
-  if (title) title.textContent = getWinnerText();
+function fillWinnerVisuals(): void {
+  toggleWinnerTrophy();
+  fillFoodsWinnerIcons();
+  setWinnerColors();
 }
 
-function setWinnerTheme(): void {
+function toggleWinnerLayout(): void {
   const box = document.getElementById("winnerBox");
   if (!box) return;
   box.classList.toggle("winner-box--foods", isFoodsTheme());
+  box.classList.toggle("winner-box--gaming", isGamingTheme());
   box.classList.toggle("winner-box--draw", getWinner() === "draw");
 }
 
-function fillWinnerIcons(): void {
-  fillWinnerIcon("winnerBlueIcon", "blue", shouldShowBlue());
-  fillWinnerIcon("winnerOrangeIcon", "orange", shouldShowOrange());
+function toggleWinnerTrophy(): void {
+  const trophy = document.getElementById("winnerTrophyIcon");
+  if (!trophy) return;
+  trophy.classList.toggle("is-hidden", !isGamingTheme());
 }
 
-function fillWinnerIcon(id: string, player: string, show: boolean): void {
-  const img = document.getElementById(id) as HTMLImageElement | null;
-  if (!img) return;
-  img.src = getWinnerIcon(player);
-  img.alt = `${player} player`;
-  img.classList.toggle("is-hidden", !show);
+function fillFoodsWinnerIcons(): void {
+  showWinnerIcon("winnerBlueIcon", isFoodsTheme() && shouldShowBlue());
+  showWinnerIcon("winnerOrangeIcon", isFoodsTheme() && shouldShowOrange());
 }
 
 function shouldShowBlue(): boolean {
@@ -165,18 +154,47 @@ function shouldShowOrange(): boolean {
   return winner === "orange" || winner === "draw";
 }
 
+function showWinnerIcon(id: string, show: boolean): void {
+  const img = document.getElementById(id) as HTMLImageElement | null;
+  if (!img) return;
+  img.classList.toggle("is-hidden", !show);
+}
+
+function setWinnerColors(): void {
+  const title = document.getElementById("winnerTitle");
+  if (!title) return;
+
+  title.classList.remove(
+    "winner-title--blue",
+    "winner-title--orange",
+    "winner-title--draw"
+  );
+
+  if (!isGamingTheme()) return;
+
+  const winner = getWinner();
+  if (winner === "blue") title.classList.add("winner-title--blue");
+  if (winner === "orange") title.classList.add("winner-title--orange");
+  if (winner === "draw") title.classList.add("winner-title--draw");
+}
+
 function setupExitGame(): void {
   const exit = document.getElementById("exitGameBtn");
   const cancel = document.getElementById("cancelExitBtn");
   const confirm = document.getElementById("confirmExitBtn");
   if (!exit || !cancel || !confirm) return;
+
   exit.addEventListener("click", openExitModal);
   cancel.addEventListener("click", closeExitModal);
   confirm.addEventListener("click", quitGame);
 }
 
 function openExitModal(): void {
-  showScreen("exitModal");
+  document.getElementById("exitModal")?.classList.remove("is-hidden");
+}
+
+function closeExitModal(): void {
+  document.getElementById("exitModal")?.classList.add("is-hidden");
 }
 
 function quitGame(): void {
@@ -186,8 +204,8 @@ function quitGame(): void {
 }
 
 function showSettings(): void {
-  hideScreen("game");
-  showScreen("settings");
+  document.getElementById("game")?.classList.add("is-hidden");
+  document.getElementById("settings")?.classList.remove("is-hidden");
 }
 
 function setupWinnerHome(): void {
@@ -198,8 +216,8 @@ function setupWinnerHome(): void {
 
 function goHome(): void {
   resetGameBoard();
-  hideScreen("game");
-  showScreen("hero");
+  document.getElementById("game")?.classList.add("is-hidden");
+  document.getElementById("hero")?.classList.remove("is-hidden");
 }
 
 function resetGameBoard(): void {
@@ -217,26 +235,15 @@ function resetTurn(): void {
 }
 
 function hideResultScreens(): void {
-  hideScreen("gameEndScreen");
-  hideScreen("winnerScreen");
-}
-
-function closeExitModal(): void {
-  hideScreen("exitModal");
-}
-
-function showScreen(id: string): void {
-  document.getElementById(id)?.classList.remove("is-hidden");
-}
-
-function hideScreen(id: string): void {
-  document.getElementById(id)?.classList.add("is-hidden");
+  document.getElementById("gameEndScreen")?.classList.add("is-hidden");
+  document.getElementById("winnerScreen")?.classList.add("is-hidden");
 }
 
 function updateGameTheme(): void {
   const game = document.getElementById("game");
   const theme = getCheckedValue("theme");
   if (!game) return;
+
   game.classList.remove("theme-gaming-board", "theme-foods-board");
   if (theme === "gaming") game.classList.add("theme-gaming-board");
   if (theme === "foods") game.classList.add("theme-foods-board");
@@ -246,32 +253,13 @@ function isFoodsTheme(): boolean {
   return getCheckedValue("theme") === "foods";
 }
 
-function setText(id: string, value: number): void {
-  const el = document.getElementById(id);
-  if (el) el.textContent = String(value);
-}
-
-function setImg(id: string, src: string): void {
-  const img = document.getElementById(id) as HTMLImageElement | null;
-  if (!img) return;
-  img.src = src;
+function isGamingTheme(): boolean {
+  return getCheckedValue("theme") === "gaming";
 }
 
 function getCheckedValue(name: string): string {
-  const el = document.querySelector<HTMLInputElement>(
+  const input = document.querySelector<HTMLInputElement>(
     `input[name="${name}"]:checked`
   );
-  return el ? el.value : "";
-}
-
-function getPlayerIcon(player: string): string {
-  const base = import.meta.env.BASE_URL;
-  if (player === "orange") return `${base}currentOrange.svg`;
-  return `${base}blue_play.svg`;
-}
-
-function getWinnerIcon(player: string): string {
-  const base = import.meta.env.BASE_URL;
-  if (player === "orange") return `${base}foods_winner_orange.svg`;
-  return `${base}foods_winner_blue.svg`;
+  return input ? input.value : "";
 }
