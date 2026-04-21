@@ -3,7 +3,6 @@ import {
   initGameState,
   switchPlayer,
   addPoint,
-  getWinner,
   getWinnerText,
   getScores
 } from "./state";
@@ -50,9 +49,11 @@ function flipCard(card: HTMLButtonElement): void {
 }
 
 function saveCard(card: HTMLButtonElement): void {
-  if (!firstCard)  {firstCard = card;
-  return;
+  if (!firstCard) {
+    firstCard = card;
+    return;
   }
+
   secondCard = card;
   lockBoard = true;
 }
@@ -100,7 +101,6 @@ function showEnd(): void {
   const s = getScores();
   blue.textContent = String(s.blue);
   orange.textContent = String(s.orange);
-
   screen.classList.remove("is-hidden");
 
   setTimeout(() => {
@@ -127,8 +127,13 @@ function setupExitGame(): void {
 
   if (!exit || !cancel || !confirm || !modal) return;
 
-  exit.addEventListener("click", () => modal.classList.remove("is-hidden"));
-  cancel.addEventListener("click", () => modal.classList.add("is-hidden"));
+  exit.addEventListener("click", () => {
+    modal.classList.remove("is-hidden");
+  });
+
+  cancel.addEventListener("click", () => {
+    modal.classList.add("is-hidden");
+  });
 
   confirm.addEventListener("click", () => {
     modal.classList.add("is-hidden");
@@ -185,5 +190,6 @@ function getCheckedValue(name: string): string {
   const el = document.querySelector<HTMLInputElement>(
     `input[name="${name}"]:checked`
   );
+
   return el ? el.value : "";
 }

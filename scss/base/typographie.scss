@@ -34,6 +34,13 @@
   font-style: normal;
   font-display: swap;
 }
+@font-face {
+  font-family: "Orbitron";
+  src: url("../../src/fonts/Orbitron-VariableFont_wght.ttf") format("truetype");
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
 
 * {
   box-sizing: border-box;
