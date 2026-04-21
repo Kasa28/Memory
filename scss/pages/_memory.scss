@@ -46,7 +46,7 @@
     position: absolute;
     left: -30px;
     bottom: -20px;
-    width: 340px;
+    width: 430px;
     opacity: 1.12;
     filter: sepia(1) hue-rotate(35deg) saturate(3) brightness(1.2);
     pointer-events: none;
@@ -166,18 +166,14 @@
     align-items: stretch;
   }
 
-  &__preview {
-    width: 100%;
-    min-height: 420px;
-    border-radius: 20px;
-    margin-bottom: 18px;
-    padding: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-  }
-
+  .settings__preview {
+  width: 100%;
+  min-height: 500px;
+  border-radius: 20px;
+  margin-bottom: 18px;
+  padding: 0;
+  box-sizing: border-box;
+}
   &__summary {
     width: 100%;
     min-height: 52px;

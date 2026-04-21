@@ -13,7 +13,6 @@ function setupHero(): void {
   const playBtn = document.getElementById("playBtn");
   const heroRef = document.getElementById("hero");
   const settingsRef = document.getElementById("settings");
-
   if (!playBtn || !heroRef || !settingsRef) return;
   playBtn.addEventListener("click", () => toggleView(heroRef, settingsRef));
 }
@@ -22,13 +21,13 @@ function setupGameStart(): void {
   const startBtn = document.getElementById("startBtn");
   const settingsRef = document.getElementById("settings");
   const gameRef = document.getElementById("game");
-
   if (!startBtn || !settingsRef || !gameRef) return;
+  startBtn.addEventListener("click", () => startGame(settingsRef, gameRef));
+}
 
-  startBtn.addEventListener("click", () => {
-    window.dispatchEvent(new CustomEvent("start-memory-game"));
-    toggleView(settingsRef, gameRef);
-  });
+function startGame(settingsRef: HTMLElement, gameRef: HTMLElement): void {
+  window.dispatchEvent(new CustomEvent("start-memory-game"));
+  toggleView(settingsRef, gameRef);
 }
 
 function setupThemePreview(): void {
@@ -57,17 +56,15 @@ function handleSettingsChange(): void {
 }
 
 function setupSettingsHoverPreview(): void {
-  const themeInputs = Array.from(
-    document.querySelectorAll<HTMLInputElement>('input[name="theme"]')
-  );
+  const inputs = getRadios("theme");
+  inputs.forEach(addHoverPreviewListeners);
+}
 
-  themeInputs.forEach((input) => {
-    const option = input.closest(".settings__option");
-    if (!option) return;
-
-    option.addEventListener("mouseenter", () => updatePreviewFromHover(input.value));
-    option.addEventListener("mouseleave", updatePreview);
-  });
+function addHoverPreviewListeners(input: HTMLInputElement): void {
+  const option = input.closest(".settings__option");
+  if (!option) return;
+  option.addEventListener("mouseenter", () => updatePreviewFromHover(input.value));
+  option.addEventListener("mouseleave", updatePreview);
 }
 
 function updateStartButton(): void {
@@ -105,45 +102,76 @@ function updatePreviewFromHover(theme: string): void {
 }
 
 function updatePreviewFromState(theme: string): void {
-  const preview = document.getElementById("preview") as HTMLElement | null;
+  const preview = getPreviewElement();
+  const currentImage = getCurrentPreviewImage(preview);
   if (!preview || !theme) return;
+  if (!currentImage) return setInitialPreview(preview, theme);
+  if (!hasThemeChanged(currentImage, theme)) return syncPreview(preview, theme);
+  switchPreview(preview, theme);
+}
 
-  const image = `url(${getPreviewImage(theme)})`;
-  const currentImage = preview.style.getPropertyValue("--preview-current-image").trim();
+function getPreviewElement(): HTMLElement | null {
+  return document.getElementById("preview") as HTMLElement | null;
+}
 
-  if (!currentImage) {
-    setPreviewState(preview, image);
-    setPreviewNext(preview, image);
-    return;
-  }
+function getCurrentPreviewImage(preview: HTMLElement | null): string {
+  if (!preview) return "";
+  return preview.style.getPropertyValue("--preview-current-image").trim();
+}
 
-  const isThemeChange = hasThemeChanged(currentImage, theme);
+function setInitialPreview(preview: HTMLElement, theme: string): void {
+  setPreviewState(preview, theme);
+  setPreviewNext(preview, theme);
+}
 
-  if (!isThemeChange) {
-    setPreviewState(preview, image);
-    setPreviewNext(preview, image);
-    return;
-  }
+function syncPreview(preview: HTMLElement, theme: string): void {
+  setPreviewState(preview, theme);
+  setPreviewNext(preview, theme);
+}
 
-  setPreviewNext(preview, image);
+function switchPreview(preview: HTMLElement, theme: string): void {
+  setPreviewNext(preview, theme);
   preview.classList.add("is-preview-switching");
-
-  window.setTimeout(() => {
-    setPreviewState(preview, image);
-    preview.classList.remove("is-preview-switching");
-  }, 220);
+  window.setTimeout(() => finishPreviewSwitch(preview, theme), 220);
 }
 
-function setPreviewState(preview: HTMLElement, image: string): void {
-  preview.style.setProperty("--preview-current-image", image);
-  preview.style.setProperty("--preview-current-size", "contain");
-  preview.style.setProperty("--preview-current-position", "center");
+function finishPreviewSwitch(preview: HTMLElement, theme: string): void {
+  setPreviewState(preview, theme);
+  preview.classList.remove("is-preview-switching");
 }
 
-function setPreviewNext(preview: HTMLElement, image: string): void {
-  preview.style.setProperty("--preview-next-image", image);
-  preview.style.setProperty("--preview-next-size", "contain");
-  preview.style.setProperty("--preview-next-position", "center");
+function setPreviewState(preview: HTMLElement, theme: string): void {
+  const config = getPreviewConfig(theme);
+  applyPreviewVars(preview, "current", config);
+}
+
+function setPreviewNext(preview: HTMLElement, theme: string): void {
+  const config = getPreviewConfig(theme);
+  applyPreviewVars(preview, "next", config);
+}
+
+function applyPreviewVars(
+  preview: HTMLElement,
+  type: "current" | "next",
+  config: PreviewConfig
+): void {
+  preview.style.setProperty(`--preview-${type}-image`, `url(${config.image})`);
+  preview.style.setProperty(`--preview-${type}-size`, config.size);
+  preview.style.setProperty(`--preview-${type}-position`, config.position);
+}
+
+function getPreviewConfig(theme: string): PreviewConfig {
+  const image = getPreviewImage(theme);
+  const settings = getPreviewLayout(theme);
+  return { image, size: settings.size, position: settings.position };
+}
+
+function getPreviewLayout(theme: string): PreviewLayout {
+  const layouts: Record<string, PreviewLayout> = {
+    gaming: { size: "90%", position: "right center" },
+    foods: { size: "90%", position: "right center" },
+  };
+  return layouts[theme] || { size: "contain", position: "center" };
 }
 
 function hasThemeChanged(currentImage: string, theme: string): boolean {
@@ -157,7 +185,6 @@ function getPreviewImage(theme: string): string {
     gaming: `${base}Theme_gaming.svg`,
     foods: `${base}Theme_food.svg`,
   };
-
   return images[theme] || "";
 }
 
@@ -169,22 +196,28 @@ function updateSummary(): void {
 
 function updateThemeSummary(): void {
   const theme = getCheckedValue("theme");
-  const labels: Record<string, string> = {
+  const labels: Record<string, string> = getThemeLabels();
+  updateText("summaryTheme", labels[theme] || "Game theme");
+}
+
+function getThemeLabels(): Record<string, string> {
+  return {
     gaming: "Gaming Theme",
     foods: "Foods Theme",
   };
-
-  updateText("summaryTheme", labels[theme] || "Game theme");
 }
 
 function updatePlayerSummary(): void {
   const player = getCheckedValue("player");
-  const labels: Record<string, string> = {
+  const labels: Record<string, string> = getPlayerLabels();
+  updateText("summaryPlayer", labels[player] || "Player");
+}
+
+function getPlayerLabels(): Record<string, string> {
+  return {
     blue: "Blue Player",
     orange: "Orange Player",
   };
-
-  updateText("summaryPlayer", labels[player] || "Player");
 }
 
 function updateSizeSummary(): void {
@@ -203,3 +236,14 @@ function toggleView(hideEl: HTMLElement, showEl: HTMLElement): void {
   hideEl.classList.add("is-hidden");
   showEl.classList.remove("is-hidden");
 }
+
+type PreviewLayout = {
+  size: string;
+  position: string;
+};
+
+type PreviewConfig = {
+  image: string;
+  size: string;
+  position: string;
+};
