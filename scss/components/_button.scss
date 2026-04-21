@@ -253,6 +253,8 @@
   }
 }
 
-.settings__divider {
+.settings__divider,
+.settings_three,
+.settings__indicator  {
   filter: brightness(0) saturate(100%) invert(78%) sepia(32%) saturate(500%) hue-rotate(10deg);
 }
