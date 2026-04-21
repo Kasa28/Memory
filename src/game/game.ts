@@ -1,53 +1,16 @@
-const THEMES: Record<string, string[]> = {
-  foods: [
-    "brezel.svg",
-    "pizza.svg",
-    "burger.svg",
-    "sushi.svg",
-    "hotdog.svg",
-    "dessert.svg",
-    "cupcake.svg",
-    "chicken.svg",
-    "wrapper.svg",
-    "tartalia.svg",
-    "shokolad.svg",
-    "sandwich.svg",
-    "salad.svg",
-    "pommes.svg",
-    "panna.svg",
-    "macarons.svg",
-    "ice.svg",
-    "donut.svg",
-  ],
-  gaming: [
-    "2.svg",
-    "3.svg",
-    "4.svg",
-    "5.svg",
-    "6.svg",
-    "7.svg",
-    "8.svg",
-    "9.svg",
-    "10.svg",
-    "11.svg",
-    "12.svg",
-    "13.svg",
-    "14.svg",
-    "15.svg",
-    "16.svg",
-    "17.svg",
-    "18.svg",
-    "19.svg",
-    "fronds.svg",
-  ],
-};
+import { renderBoard } from "./board";
+import {
+  initGameState,
+  switchPlayer,
+  addPoint,
+  getWinner,
+  getWinnerText,
+  getScores
+} from "./state";
 
 let firstCard: HTMLButtonElement | null = null;
 let secondCard: HTMLButtonElement | null = null;
 let lockBoard = false;
-let currentPlayer = "";
-let blueScore = 0;
-let orangeScore = 0;
 
 export function initGame(): void {
   setupCardFlip();
@@ -65,80 +28,17 @@ function startGame(): void {
   hideResultScreens();
 }
 
-function getCheckedValue(name: string): string {
-  const checked = document.querySelector<HTMLInputElement>(
-    `input[name="${name}"]:checked`
-  );
-  return checked ? checked.value : "";
-}
-
 function setupCardFlip(): void {
-  const fieldRef = document.getElementById("field");
-  if (!fieldRef) return;
-  fieldRef.addEventListener("click", handleCardClick);
+  const field = document.getElementById("field");
+  if (!field) return;
+  field.addEventListener("click", handleCardClick);
 }
 
-function renderBoard(): void {
-  const fieldRef = document.getElementById("field");
-  const theme = getCheckedValue("theme");
-  const cards = createCards();
+function handleCardClick(e: Event): void {
+  const t = e.target as HTMLElement;
+  const card = t.closest(".card") as HTMLButtonElement | null;
 
-  if (!fieldRef || !theme) return;
-  fieldRef.innerHTML = cards.map((card) => getCardTemplate(theme, card)).join("");
-}
-
-function createCards(): string[] {
-  const theme = getCheckedValue("theme");
-  const size = Number(getCheckedValue("size"));
-  const images = THEMES[theme];
-
-  if (!images || !size) return [];
-
-  const pairs = size / 2;
-  const selected = images.slice(0, pairs);
-  return shuffleCards([...selected, ...selected]);
-}
-
-function shuffleCards(cards: string[]): string[] {
-  return [...cards].sort(() => Math.random() - 0.5);
-}
-
-function getCardBackImage(theme: string): string {
-  const base = import.meta.env.BASE_URL;
-  const backs: Record<string, string> = {
-    gaming: `${base}cards/gaming/back.svg`,
-    foods: `${base}cards/foods/back.svg`,
-  };
-
-  return backs[theme] || "";
-}
-
-function getCardTemplate(theme: string, card: string): string {
-  const base = import.meta.env.BASE_URL;
-  const frontImagePath = getCardBackImage(theme);
-  const backImagePath = `${base}cards/${theme}/${card}`;
-
-  return `
-    <button class="card" data-card="${card}">
-      <div class="card__inner">
-        <div class="card__face card__face--front">
-          <img src="${frontImagePath}" alt="card back">
-        </div>
-        <div class="card__face card__face--back">
-          <img src="${backImagePath}" alt="${card}">
-        </div>
-      </div>
-    </button>
-  `;
-}
-
-function handleCardClick(event: Event): void {
-  const target = event.target as HTMLElement;
-  const card = target.closest(".card") as HTMLButtonElement | null;
-
-  if (!card || lockBoard || card === firstCard || card.classList.contains("matched")) {
-    return;
-  }
+  if (!card || lockBoard || card === firstCard || card.classList.contains("matched")) return;
 
   flipCard(card);
   saveCard(card);
@@ -150,40 +50,32 @@ function flipCard(card: HTMLButtonElement): void {
 }
 
 function saveCard(card: HTMLButtonElement): void {
-  if (!firstCard) {
-    firstCard = card;
-    return;
+  if (!firstCard)  {firstCard = card;
+  return;
   }
-
   secondCard = card;
   lockBoard = true;
 }
 
 function checkTurn(): void {
   if (!firstCard || !secondCard) return;
-  if (isMatch()) return keepMatchedCards();
-  unflipCards();
+  isMatch() ? keepMatch() : unflipCards();
 }
 
 function isMatch(): boolean {
-  if (!firstCard || !secondCard) return false;
-  return firstCard.dataset.card === secondCard.dataset.card;
+  return firstCard?.dataset.card === secondCard?.dataset.card;
 }
 
-function keepMatchedCards(): void {
-  if (!firstCard || !secondCard) return;
-
-  firstCard.classList.add("matched");
-  secondCard.classList.add("matched");
-  addPointToCurrentPlayer();
+function keepMatch(): void {
+  firstCard?.classList.add("matched");
+  secondCard?.classList.add("matched");
+  addPoint();
   resetTurn();
   checkGameEnd();
 }
 
 function unflipCards(): void {
-  if (!firstCard || !secondCard) return;
-
-  window.setTimeout(() => {
+  setTimeout(() => {
     firstCard?.classList.remove("is-flipped");
     secondCard?.classList.remove("is-flipped");
     switchPlayer();
@@ -191,293 +83,75 @@ function unflipCards(): void {
   }, 900);
 }
 
-function switchPlayer(): void {
-  currentPlayer = currentPlayer === "blue" ? "orange" : "blue";
-  updatePlayerDisplay();
-}
-
 function checkGameEnd(): void {
-  const matchedCards = document.querySelectorAll(".card.matched");
+  const matched = document.querySelectorAll(".card.matched");
   const size = Number(getCheckedValue("size"));
-
-  if (matchedCards.length !== size) return;
-  showGameEndScreen();
+  if (matched.length !== size) return;
+  showEnd();
 }
 
-function showGameEndScreen(): void {
-  const gameEndScreen = document.getElementById("gameEndScreen");
-  const gameEndBox = document.getElementById("gameEndBox");
-  const blueScoreRef = document.getElementById("resultBlueScore");
-  const orangeScoreRef = document.getElementById("resultOrangeScore");
-  const blueIcon = document.getElementById("resultBlueIcon") as HTMLImageElement | null;
-  const orangeIcon = document.getElementById("resultOrangeIcon") as HTMLImageElement | null;
+function showEnd(): void {
+  const screen = document.getElementById("gameEndScreen");
+  const blue = document.getElementById("resultBlueScore");
+  const orange = document.getElementById("resultOrangeScore");
 
-  if (!gameEndScreen || !gameEndBox || !blueScoreRef || !orangeScoreRef) return;
+  if (!screen || !blue || !orange) return;
 
-  blueScoreRef.textContent = String(blueScore);
-  orangeScoreRef.textContent = String(orangeScore);
-  setResultIcons(blueIcon, orangeIcon);
-  setGameEndTheme(gameEndBox);
+  const s = getScores();
+  blue.textContent = String(s.blue);
+  orange.textContent = String(s.orange);
 
-  gameEndScreen.classList.remove("is-hidden");
+  screen.classList.remove("is-hidden");
 
-  window.setTimeout(() => {
-    gameEndScreen.classList.add("is-hidden");
-    showWinnerScreen();
+  setTimeout(() => {
+    screen.classList.add("is-hidden");
+    showWinner();
   }, 2200);
 }
 
-function showWinnerScreen(): void {
-  const winnerScreen = document.getElementById("winnerScreen");
-  const winnerBox = document.getElementById("winnerBox");
-  const winnerTitle = document.getElementById("winnerTitle");
-  const winnerIcon = document.getElementById("winnerIcon") as HTMLImageElement | null;
+function showWinner(): void {
+  const screen = document.getElementById("winnerScreen");
+  const title = document.getElementById("winnerTitle");
 
-  if (!winnerScreen || !winnerBox || !winnerTitle || !winnerIcon) return;
+  if (!screen || !title) return;
 
-  const winner = getWinner();
-
-  winnerTitle.textContent = getWinnerText();
-  setWinnerTheme(winnerBox);
-  setWinnerStyle(winnerBox, winnerTitle, winnerIcon, winner);
-
-  winnerScreen.classList.remove("is-hidden");
-}
-
-function getWinner(): string {
-  if (blueScore > orangeScore) return "blue";
-  if (orangeScore > blueScore) return "orange";
-  return "draw";
-}
-
-function getWinnerText(): string {
-  const winner = getWinner();
-  if (winner === "blue") return "Blue Player";
-  if (winner === "orange") return "Orange Player";
-  return "Draw";
-}
-
-function setGameEndTheme(element: HTMLElement): void {
-  const theme = getCheckedValue("theme");
-
-  element.classList.remove("theme-foods", "theme-gaming");
-
-  if (theme === "foods") element.classList.add("theme-foods");
-  if (theme === "gaming") element.classList.add("theme-gaming");
-}
-
-function setWinnerTheme(element: HTMLElement): void {
-  element.classList.remove(
-    "theme-gaming",
-    "theme-foods-blue",
-    "theme-foods-orange",
-    "theme-foods-draw"
-  );
-
-  const theme = getCheckedValue("theme");
-  const winner = getWinner();
-
-  if (theme === "gaming") {
-    element.classList.add("theme-gaming");
-    return;
-  }
-
-  if (theme === "foods" && winner === "blue") {
-    element.classList.add("theme-foods-blue");
-    return;
-  }
-
-  if (theme === "foods" && winner === "orange") {
-    element.classList.add("theme-foods-orange");
-    return;
-  }
-
-  element.classList.add("theme-foods-draw");
-}
-
-function setWinnerStyle(
-  winnerBox: HTMLElement,
-  winnerTitle: HTMLElement,
-  winnerIcon: HTMLImageElement,
-  winner: string
-): void {
-  const base = import.meta.env.BASE_URL;
-  const theme = getCheckedValue("theme");
-
-  winnerBox.classList.remove("winner-blue", "winner-orange", "winner-draw");
-  winnerTitle.classList.remove(
-    "winner-title-blue",
-    "winner-title-orange",
-    "winner-title-draw"
-  );
-
-  if (winner === "blue") {
-    winnerBox.classList.add("winner-blue");
-    winnerTitle.classList.add("winner-title-blue");
-  }
-
-  if (winner === "orange") {
-    winnerBox.classList.add("winner-orange");
-    winnerTitle.classList.add("winner-title-orange");
-  }
-
-  if (winner === "draw") {
-    winnerBox.classList.add("winner-draw");
-    winnerTitle.classList.add("winner-title-draw");
-  }
-
-  if (theme === "gaming") {
-    winnerIcon.src = `${base}trophy.svg`;
-    return;
-  }
-
-  if (theme === "foods" && winner === "blue") {
-    winnerIcon.src = `${base}blue_player.svg`;
-    return;
-  }
-
-  if (theme === "foods" && winner === "orange") {
-    winnerIcon.src = `${base}orange_player.svg`;
-    return;
-  }
-
-  winnerIcon.src = `${base}trophy.svg`;
-}
-
-function setResultIcons(
-  blueIcon: HTMLImageElement | null,
-  orangeIcon: HTMLImageElement | null
-): void {
-  const base = import.meta.env.BASE_URL;
-
-  if (blueIcon) blueIcon.src = `${base}blue_player.svg`;
-  if (orangeIcon) orangeIcon.src = `${base}orange_player.svg`;
-}
-
-function initGameState(): void {
-  currentPlayer = getCheckedValue("player");
-  blueScore = 0;
-  orangeScore = 0;
-  updateScoreIcons();
-  updatePlayerDisplay();
-  updateScoreDisplay();
-}
-
-function updatePlayerDisplay(): void {
-  const currentPlayerIcon = document.getElementById("currentPlayerIcon") as HTMLImageElement | null;
-  if (!currentPlayerIcon) return;
-  currentPlayerIcon.src = getPlayerIcon(currentPlayer);
-}
-
-function updateScoreDisplay(): void {
-  const blueScoreRef = document.getElementById("blueScore");
-  const orangeScoreRef = document.getElementById("orangeScore");
-
-  if (blueScoreRef) blueScoreRef.textContent = String(blueScore);
-  if (orangeScoreRef) orangeScoreRef.textContent = String(orangeScore);
-}
-
-function getPlayerIcon(player: string): string {
-  const base = import.meta.env.BASE_URL;
-  const icons: Record<string, string> = {
-    blue: `${base}blue_player.svg`,
-    orange: `${base}orange_player.svg`,
-  };
-
-  return icons[player] || "";
-}
-
-function addPointToCurrentPlayer(): void {
-  if (currentPlayer === "blue") blueScore++;
-  if (currentPlayer === "orange") orangeScore++;
-  updateScoreDisplay();
+  title.textContent = getWinnerText();
+  screen.classList.remove("is-hidden");
 }
 
 function setupExitGame(): void {
-  const exitBtn = document.getElementById("exitGameBtn");
-  const cancelBtn = document.getElementById("cancelExitBtn");
-  const confirmBtn = document.getElementById("confirmExitBtn");
+  const exit = document.getElementById("exitGameBtn");
+  const cancel = document.getElementById("cancelExitBtn");
+  const confirm = document.getElementById("confirmExitBtn");
   const modal = document.getElementById("exitModal");
-  const gameRef = document.getElementById("game");
-  const settingsRef = document.getElementById("settings");
 
-  if (!exitBtn || !cancelBtn || !confirmBtn || !modal || !gameRef || !settingsRef) return;
+  if (!exit || !cancel || !confirm || !modal) return;
 
-  exitBtn.addEventListener("click", openExitModal);
-  cancelBtn.addEventListener("click", closeExitModal);
+  exit.addEventListener("click", () => modal.classList.remove("is-hidden"));
+  cancel.addEventListener("click", () => modal.classList.add("is-hidden"));
 
-  confirmBtn.addEventListener("click", () => {
-    closeExitModal();
+  confirm.addEventListener("click", () => {
+    modal.classList.add("is-hidden");
     resetGameBoard();
-    toggleView(gameRef, settingsRef);
   });
-}
-
-function openExitModal(): void {
-  const modal = document.getElementById("exitModal");
-  if (!modal) return;
-  modal.classList.remove("is-hidden");
-}
-
-function closeExitModal(): void {
-  const modal = document.getElementById("exitModal");
-  if (!modal) return;
-  modal.classList.add("is-hidden");
 }
 
 function setupWinnerHome(): void {
-  const homeBtn = document.getElementById("winnerHomeBtn");
-  const winnerScreen = document.getElementById("winnerScreen");
-  const gameRef = document.getElementById("game");
-  const settingsRef = document.getElementById("settings");
+  const btn = document.getElementById("winnerHomeBtn");
+  const screen = document.getElementById("winnerScreen");
 
-  if (!homeBtn || !winnerScreen || !gameRef || !settingsRef) return;
+  if (!btn || !screen) return;
 
-  homeBtn.addEventListener("click", () => {
-    winnerScreen.classList.add("is-hidden");
+  btn.addEventListener("click", () => {
+    screen.classList.add("is-hidden");
     resetGameBoard();
-    toggleView(gameRef, settingsRef);
   });
 }
 
-function hideResultScreens(): void {
-  const gameEndScreen = document.getElementById("gameEndScreen");
-  const winnerScreen = document.getElementById("winnerScreen");
-
-  if (gameEndScreen) gameEndScreen.classList.add("is-hidden");
-  if (winnerScreen) winnerScreen.classList.add("is-hidden");
-}
-
 function resetGameBoard(): void {
-  const fieldRef = document.getElementById("field");
-  if (fieldRef) fieldRef.innerHTML = "";
-
-  hideResultScreens();
+  const field = document.getElementById("field");
+  if (field) field.innerHTML = "";
   resetTurn();
-  blueScore = 0;
-  orangeScore = 0;
-  updateScoreDisplay();
-}
-
-function updateScoreIcons(): void {
-  const base = import.meta.env.BASE_URL;
-  const orangeIcon = document.getElementById("orangeScoreIcon") as HTMLImageElement | null;
-  const blueIcon = document.getElementById("blueScoreIcon") as HTMLImageElement | null;
-
-  if (orangeIcon) orangeIcon.src = `${base}orange_player.svg`;
-  if (blueIcon) blueIcon.src = `${base}blue_player.svg`;
-}
-
-function updateGameTheme(): void {
-  const gameRef = document.getElementById("game");
-  const theme = getCheckedValue("theme");
-
-  if (!gameRef) return;
-
-  gameRef.classList.remove("theme-gaming-board", "theme-foods-board");
-
-  if (theme === "gaming") gameRef.classList.add("theme-gaming-board");
-  if (theme === "foods") gameRef.classList.add("theme-foods-board");
 }
 
 function resetTurn(): void {
@@ -486,7 +160,30 @@ function resetTurn(): void {
   lockBoard = false;
 }
 
-function toggleView(hideEl: HTMLElement, showEl: HTMLElement): void {
-  hideEl.classList.add("is-hidden");
-  showEl.classList.remove("is-hidden");
+function hideResultScreens(): void {
+  document.getElementById("gameEndScreen")?.classList.add("is-hidden");
+  document.getElementById("winnerScreen")?.classList.add("is-hidden");
+}
+
+function closeExitModal(): void {
+  document.getElementById("exitModal")?.classList.add("is-hidden");
+}
+
+function updateGameTheme(): void {
+  const game = document.getElementById("game");
+  const theme = getCheckedValue("theme");
+
+  if (!game) return;
+
+  game.classList.remove("theme-gaming-board", "theme-foods-board");
+
+  if (theme === "gaming") game.classList.add("theme-gaming-board");
+  if (theme === "foods") game.classList.add("theme-foods-board");
+}
+
+function getCheckedValue(name: string): string {
+  const el = document.querySelector<HTMLInputElement>(
+    `input[name="${name}"]:checked`
+  );
+  return el ? el.value : "";
 }
