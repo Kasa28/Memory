@@ -55,37 +55,42 @@
 
 .settings {
   min-height: 100vh;
-  padding: 80px 120px;
   background: #f4f1eb;
   display: flex;
-  gap: 48px;
+  align-items: flex-start;
   box-sizing: border-box;
 
   &__left {
     width: 100%;
     max-width: 360px;
     flex-shrink: 0;
+    max-width: 282px;
+    padding-left: 40px;
+    padding-top: 61px;
   }
 
   &__title {
     font-size: 3.6rem;
     margin-bottom: 14px;
     font-family: "RedRose", sans-serif;
+    color: #2f2f2f;
   }
 
   &__heading {
-    font-family: "Almari", sans-serif;
+    font-family: "Almarai", sans-serif;
     display: flex;
     align-items: center;
     gap: 10px;
     font-size: 2rem;
     margin-bottom: 16px;
+    color: #2f2f2f;
   }
 
   &__icon {
     width: 22px;
     height: 22px;
     display: block;
+    flex-shrink: 0;
   }
 
   &__group {
@@ -99,6 +104,7 @@
     font-family: "Almarai", sans-serif;
     margin-bottom: 12px;
     font-size: 1.2rem;
+    color: #2f2f2f;
     cursor: pointer;
 
     span {
@@ -151,36 +157,74 @@
 
   &__right {
     flex: 1;
-    min-width: 0;
     display: flex;
     justify-content: flex-end;
-    align-items: center;
-    margin-top: 100px;
+    align-items: flex-start;
+    padding-top: 153px;
+    padding-right: 65px;
   }
 
   &__panel {
     width: 100%;
-    max-width: 662px;
+    max-width: 557px;
     display: flex;
     flex-direction: column;
     align-items: stretch;
   }
 
-  .settings__preview {
-  width: 100%;
-  min-height: 500px;
-  border-radius: 20px;
-  margin-bottom: 18px;
-  padding: 0;
-  box-sizing: border-box;
-}
+  &__preview {
+    width: 100%;
+    min-height: 500px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+    padding: 0;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background-repeat: no-repeat;
+      transition: opacity 220ms ease;
+      pointer-events: none;
+    }
+
+    &::before {
+      background-image: var(--preview-current-image);
+      background-size: var(--preview-current-size, contain);
+      background-position: var(--preview-current-position, center);
+      opacity: 1;
+    }
+
+    &::after {
+      background-image: var(--preview-next-image);
+      background-size: var(--preview-next-size, contain);
+      background-position: var(--preview-next-position, center);
+      opacity: 0;
+    }
+
+    &.is-preview-switching {
+      &::before {
+        opacity: 0;
+      }
+
+      &::after {
+        opacity: 1;
+      }
+    }
+  }
+
   &__summary {
     width: 100%;
     min-height: 52px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 14px;
+    gap: 18px;
     background: #ebe7e1;
     padding: 10px 14px;
     border-radius: 6px;
@@ -188,15 +232,17 @@
   }
 
   &__summary-info {
+    flex: 1;
+    min-width: 0;
     display: flex;
     align-items: center;
-    gap: 10px;
-    min-width: 0;
+    flex-wrap: nowrap;
 
     span {
       font-size: 1.1rem;
       line-height: 1;
       white-space: nowrap;
+      color: #2f2f2f;
     }
   }
 
@@ -207,6 +253,33 @@
     object-fit: contain;
     flex-shrink: 0;
   }
+}
+
+.settings_three {
+  display: block;
+  width: 227px;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 40px;
+  object-fit: contain;
+}
+
+.settings__option input:checked + span {
+  font-weight: 700;
+  color: #2f2f2f;
+  letter-spacing: 0.2px;
+}
+
+.settings__divider,
+.settings_three,
+.settings__indicator {
+  filter: brightness(0) saturate(100%) invert(78%) sepia(32%) saturate(500%)
+    hue-rotate(10deg);
+}
+
+.settings__start {
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 .game {
@@ -386,7 +459,7 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 800px) {
   .hero {
     padding: 40px 24px;
 
@@ -402,48 +475,69 @@
   .settings {
     padding: 40px 24px;
     flex-direction: column;
-    gap: 32px;
+    gap: 28px;
 
     &__left {
       max-width: none;
+      width: 100%;
+      padding-left: 0;
     }
 
     &__right {
       width: 100%;
-      justify-content: center;
+      margin-top: 0;
+      justify-content: flex-start;
+      align-items: flex-start;
+      padding-right: 0px;
     }
 
     &__panel {
-      max-width: 682px;
+      width: 100%;
+      max-width: 420px;
+      align-items: flex-start;
     }
 
-    &__preview,
+    &__preview {
+      display: none;
+    }
+
     &__summary {
       width: 100%;
-    }
-
-    &__indicator {
-      width: 34px;
-    }
-
-    &__summary {
-      gap: 10px;
-      padding: 10px 12px;
+      min-height: auto;
+      border-radius: 6px;
+      background: #ebe7e1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      margin-top: -175px;
     }
 
     &__summary-info {
-      gap: 8px;
+      width: 100%;
+      display: flex;
       flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
 
       span {
         font-size: 1rem;
+        line-height: 1.2;
+        white-space: normal;
+        color: #2f2f2f;
       }
     }
 
     &__divider {
       width: 18px;
       height: 24px;
+      flex-shrink: 0;
     }
+  }
+
+  .settings__start {
+    margin-left: 0;
+    align-self: flex-start;
   }
 
   .game {
@@ -459,17 +553,66 @@
   }
 }
 
-.settings_three {
-  display: block;
-  width:227px;
-  max-width: 100%;
-  height: auto;
-  margin-bottom: 40px;
-  object-fit: contain;
+
+@media (max-width: 950px) {
+  .settings__summary {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 16px;
+  }
+
+  .settings__summary-info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .settings__divider {
+    display: none;
+  }
+
+  .settings__start {
+    margin-left: 0;
+    align-self: flex-start;
+  }
 }
 
-.settings__option input:checked + span {
-  font-weight: 700;
-  color: #2f2f2f;
-  letter-spacing: 0.2px;
+@media (max-width: 950px) {
+  .settings__right {
+    margin-top: 24px;
+  }
+
+  .settings__panel {
+    max-width: 100%;
+  }
+
+  .settings__summary {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 14px;
+  }
+
+  .settings__summary-info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .settings__divider {
+    display: block;
+    width: 40px;
+    height: 28px;
+    transform: rotate(90deg);
+  }
+
+  .settings__start {
+    align-self: flex-start;
+    margin-left: 0;
+  }
 }
