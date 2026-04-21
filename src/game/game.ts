@@ -87,6 +87,7 @@ function unflipCards(): void {
 function checkGameEnd(): void {
   const matched = document.querySelectorAll(".card.matched");
   const size = Number(getCheckedValue("size"));
+
   if (matched.length !== size) return;
   showEnd();
 }
@@ -123,40 +124,47 @@ function setupExitGame(): void {
   const exit = document.getElementById("exitGameBtn");
   const cancel = document.getElementById("cancelExitBtn");
   const confirm = document.getElementById("confirmExitBtn");
-  const modal = document.getElementById("exitModal");
 
-  if (!exit || !cancel || !confirm || !modal) return;
+  if (!exit || !cancel || !confirm) return;
 
-  exit.addEventListener("click", () => {
-    modal.classList.remove("is-hidden");
-  });
+  exit.addEventListener("click", openExitModal);
+  cancel.addEventListener("click", closeExitModal);
+  confirm.addEventListener("click", quitGame);
+}
 
-  cancel.addEventListener("click", () => {
-    modal.classList.add("is-hidden");
-  });
+function openExitModal(): void {
+  document.getElementById("exitModal")?.classList.remove("is-hidden");
+}
 
-  confirm.addEventListener("click", () => {
-    modal.classList.add("is-hidden");
-    resetGameBoard();
-  });
+function quitGame(): void {
+  closeExitModal();
+  resetGameBoard();
+  showSettings();
+}
+
+function showSettings(): void {
+  document.getElementById("game")?.classList.add("is-hidden");
+  document.getElementById("settings")?.classList.remove("is-hidden");
 }
 
 function setupWinnerHome(): void {
   const btn = document.getElementById("winnerHomeBtn");
-  const screen = document.getElementById("winnerScreen");
+  if (!btn) return;
+  btn.addEventListener("click", goHome);
+}
 
-  if (!btn || !screen) return;
-
-  btn.addEventListener("click", () => {
-    screen.classList.add("is-hidden");
-    resetGameBoard();
-  });
+function goHome(): void {
+  resetGameBoard();
+  document.getElementById("game")?.classList.add("is-hidden");
+  document.getElementById("hero")?.classList.remove("is-hidden");
 }
 
 function resetGameBoard(): void {
   const field = document.getElementById("field");
   if (field) field.innerHTML = "";
   resetTurn();
+  hideResultScreens();
+  closeExitModal();
 }
 
 function resetTurn(): void {
