@@ -1,0 +1,179 @@
+.game.theme-foods-board {
+  background: #f8f5e8;
+
+  .game__topbar {
+    background: rgba(223, 215, 203, 0.55);
+  }
+
+  .game__scores {
+    background: #f5eee3;
+  }
+
+  .game__score-box:first-child {
+    color: #ef6a3a;
+  }
+
+  .game__score-box:last-child {
+    color: #1d63b8;
+  }
+
+  .game__current-player {
+    color: #8c7868;
+    font-family: "Klee One", cursive;
+  }
+
+  .game__exit:hover {
+    .game__exit-default {
+      opacity: 0;
+    }
+
+    .game__exit-hover {
+      opacity: 1;
+    }
+  }
+
+  .game__modal-box {
+    background: #fff4df;
+  }
+
+  .game__modal-text {
+    width: 376px;
+    max-width: 100%;
+    color: #a45212;
+    font-family: "Klee One", cursive;
+    font-weight: 600;
+    font-size: 2.8rem;
+    line-height: 4rem;
+    text-align: center;
+  }
+
+  .game__modal-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: nowrap;
+  }
+
+  .game__modal-cancel,
+  .game__modal-confirm {
+    border: none;
+    background: transparent;
+    color: inherit;
+    font-family: "Delius Unicase", cursive;
+    font-weight: 400;
+  }
+}
+
+.theme-gaming {
+  background:
+    radial-gradient(circle at top, rgba(117, 219, 255, 0.28) 0%, rgba(117, 219, 255, 0) 35%),
+    linear-gradient(180deg, #1f5a6a 0%, #123844 100%);
+  color: #f6f2e8;
+}
+
+.theme-gaming .game__result-title {
+  color: #ff2f8f;
+}
+
+.theme-gaming .game__result-subtitle,
+.theme-gaming .game__winner-subtitle {
+  color: #f6f2e8;
+}
+
+.theme-gaming .game__result-score {
+  background: #f3f0df;
+  color: #17333c;
+}
+
+.theme-gaming .game__winner-icon {
+  background: transparent;
+}
+
+.theme-gaming .game__winner-home {
+  border: 2px solid #ff4ea3;
+  background: transparent;
+  color: #f6f2e8;
+}
+
+.theme-foods {
+  background: linear-gradient(180deg, #ff8248 0%, #ef6936 100%);
+  color: #fff7ea;
+}
+
+.theme-foods .game__result-title {
+  color: #fff7ea;
+}
+
+.theme-foods .game__result-subtitle {
+  color: #fff7ea;
+}
+
+.theme-foods .game__result-score {
+  background: #fff3e2;
+  color: #84411f;
+}
+
+.theme-foods-blue,
+.theme-foods-orange,
+.theme-foods-draw {
+  background: #f8f5e8;
+}
+
+.theme-foods-blue .game__winner-subtitle,
+.theme-foods-orange .game__winner-subtitle,
+.theme-foods-draw .game__winner-subtitle {
+  color: #b6846f;
+}
+
+.theme-foods-blue .game__winner-icon,
+.theme-foods-orange .game__winner-icon,
+.theme-foods-draw .game__winner-icon {
+  background: #f7e8e4;
+}
+
+.theme-foods-blue .game__winner-home,
+.theme-foods-orange .game__winner-home,
+.theme-foods-draw .game__winner-home {
+  border: none;
+  background: #ef6a3a;
+  color: #fff7ea;
+}
+
+.winner-title-blue {
+  color: #3dbdff;
+}
+
+.winner-title-orange {
+  color: #ff7a3d;
+}
+
+.winner-title-draw {
+  color: #d2a94d;
+}
+
+.theme-foods-blue .winner-title-blue {
+  color: #1d63b8;
+}
+
+.theme-foods-orange .winner-title-orange {
+  color: #ef6a3a;
+}
+
+.theme-foods-draw .winner-title-draw {
+  color: #b48a39;
+}
+
+.theme-gaming .winner-title-blue {
+  color: #53cfff;
+  text-shadow: 0 0 18px rgba(83, 207, 255, 0.22);
+}
+
+.theme-gaming .winner-title-orange {
+  color: #ff7440;
+  text-shadow: 0 0 18px rgba(255, 116, 64, 0.22);
+}
+
+.theme-gaming .winner-title-draw {
+  color: #ffd36a;
+}
