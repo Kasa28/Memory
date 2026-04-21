@@ -10,6 +10,7 @@
   --btn-bg: #f0ea6e;
   --btn-text: #303131;
   position: relative;
+  margin-top: 40px;
   margin-left: 250px;
   width: 230px;
   height: 82px;
@@ -19,7 +20,6 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-top: 40px;
   font-family: "RedRose", sans-serif;
 
   &-shape {
@@ -191,7 +191,7 @@
 
 .game__exit {
   width: 200px;
-  height: 64px;
+  height: 40px;
   padding: 0 24px;
   border-radius: 8px;
   display: inline-flex;
@@ -204,11 +204,12 @@
     background-color 180ms ease,
     box-shadow 180ms ease,
     transform 180ms ease,
-    border-color 180ms ease;
+    border-color 180ms ease,
+    color 180ms ease;
 
   &-icon {
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
     flex-shrink: 0;
     transition: background-color 180ms ease;
     -webkit-mask: url("/move_item.svg") center / contain no-repeat;
@@ -303,158 +304,6 @@
   }
 }
 
-/* GAMING THEME */
-.theme-gaming-board {
-  .game__exit {
-    border: 4px solid #ff0f63;
-    background: #5f6482;
-
-    &-icon {
-      background-color: #f6f2ee;
-    }
-
-    &-text {
-      color: #f6f2ee;
-      font-family: "Orbitron", sans-serif;
-      font-size: 1rem;
-    }
-
-    &:hover {
-      background: #666c8b;
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.14);
-
-      .game__exit-icon {
-        background-color: #ff0f63;
-      }
-
-      .game__exit-text {
-        color: #ffffff;
-      }
-    }
-
-    &:focus-visible {
-      outline: none;
-      box-shadow:
-        0 0 0 4px rgba(255, 15, 99, 0.18),
-        0 8px 18px rgba(0, 0, 0, 0.14);
-    }
-  }
-
-  .game__modal-box {
-    background: #d9dee3;
-  }
-
-  .game__modal-text {
-    color: #2d5b70;
-    font-family: "Orbitron", sans-serif;
-  }
-
-  .game__modal-btn {
-    border: 2px solid #ff0f63;
-    font-family: "Orbitron", sans-serif;
-  }
-
-  .game__modal-btn--back {
-    background: #ff0f63;
-    color: #ffffff;
-    box-shadow: 0 6px 14px rgba(255, 15, 99, 0.2);
-
-    &:hover {
-      background: #ff2a76;
-    }
-
-    &:focus-visible {
-      outline: none;
-      box-shadow: 0 0 0 4px rgba(255, 15, 99, 0.18);
-    }
-  }
-
-  .game__modal-btn--quit {
-    background: transparent;
-    color: #ff0f63;
-
-    &:hover {
-      background: rgba(255, 15, 99, 0.08);
-    }
-
-    &:focus-visible {
-      outline: none;
-      box-shadow: 0 0 0 4px rgba(255, 15, 99, 0.18);
-    }
-  }
-}
-
-/* FOODS THEME */
-.theme-foods-board {
-  .game__exit {
-    border: 4px solid #c06a17;
-    background: #a85d18;
-
-    &-icon {
-      background-color: #f7e7d2;
-    }
-
-    &-text {
-      color: #f7e7d2;
-      font-family: "Almarai", sans-serif;
-      text-transform: uppercase;
-    }
-
-    &:hover {
-      background: #bc6a1d;
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.14);
-
-      .game__exit-icon {
-        background-color: #fff2df;
-      }
-
-      .game__exit-text {
-        color: #fff2df;
-      }
-    }
-
-    &:focus-visible {
-      outline: none;
-      box-shadow:
-        0 0 0 4px rgba(192, 106, 23, 0.18),
-        0 8px 18px rgba(0, 0, 0, 0.14);
-    }
-  }
-
-  .game__modal-box {
-    background: #f4f0ec;
-  }
-
-  .game__modal-text {
-    color: #b25d17;
-    font-family: "Almarai", sans-serif;
-    font-weight: 400;
-  }
-
-  .game__modal-btn {
-    border: 2px solid #c06a17;
-    font-family: "Almarai", sans-serif;
-  }
-
-  .game__modal-btn--back {
-    background: #c06a17;
-    color: #fff4df;
-
-    &:hover {
-      background: #cf7721;
-    }
-  }
-
-  .game__modal-btn--quit {
-    background: transparent;
-    color: #b25d17;
-
-    &:hover {
-      background: rgba(192, 106, 23, 0.08);
-    }
-  }
-}
-
 .game__winner-home {
   min-width: 110px;
   height: 46px;
@@ -465,209 +314,36 @@
   transition: 120ms ease-in-out;
 }
 
-.settings__divider,
-.settings_three,
-.settings__indicator {
-  filter: brightness(0) saturate(100%) invert(78%) sepia(32%) saturate(500%)
-    hue-rotate(10deg);
+#orangeScore {
+  color: #ff7a00;
+  font-size: 25px;
 }
 
-.settings__preview {
-  position: relative;
-  overflow: hidden;
-
-  &::before,
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background-repeat: no-repeat;
-    transition: opacity 220ms ease;
-    pointer-events: none;
-  }
-
-  &::before {
-    background-image: var(--preview-current-image);
-    background-size: var(--preview-current-size, contain);
-    background-position: var(--preview-current-position, center);
-    opacity: 1;
-  }
-
-  &::after {
-    background-image: var(--preview-next-image);
-    background-size: var(--preview-next-size, contain);
-    background-position: var(--preview-next-position, center);
-    opacity: 0;
-  }
-
-  &.is-preview-switching {
-    &::before {
-      opacity: 0;
-    }
-
-    &::after {
-      opacity: 1;
-    }
-  }
+#blueScore {
+  color: #1296f3;
 }
 
-.game.theme-foods-board {
-  background: #f8f5e8;
-
-  .game__topbar {
-    background: rgba(223, 215, 203, 0.55);
-  }
-
-  .game__scores {
-    background: #f5eee3;
-  }
-
-  .game__score-box:first-child {
-    color: #ef6a3a;
-  }
-
-  .game__score-box:last-child {
-    color: #1d63b8;
-  }
-
-  .game__current-player {
-    color: #8c7868;
-    font-family: "Klee One", cursive;
-  }
-
-  .game__modal-box {
-    background: #fff4df;
-  }
-
-  .game__modal-text {
-    width: 376px;
-    max-width: 100%;
-    color: #a45212;
-    font-family: "Klee One", cursive;
-    font-weight: 600;
-    font-size: 2.8rem;
-    line-height: 4rem;
-    text-align: center;
-  }
-
-  .game__modal-actions {
-    gap: 18px;
-    flex-wrap: nowrap;
-  }
+.game__current-player {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 2rem;
+  font-weight: 700;
 }
 
-.theme-gaming {
-  background:
-    radial-gradient(circle at top, rgba(117, 219, 255, 0.28) 0%, rgba(117, 219, 255, 0) 35%),
-    linear-gradient(180deg, #1f5a6a 0%, #123844 100%);
-  color: #f6f2e8;
+.game__score-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+  flex-shrink: 0;
 }
 
-.theme-gaming .game__result-title {
-  color: #ff2f8f;
-}
-
-.theme-gaming .game__result-subtitle,
-.theme-gaming .game__winner-subtitle {
-  color: #f6f2e8;
-}
-
-.theme-gaming .game__result-score {
-  background: #f3f0df;
-  color: #17333c;
-}
-
-.theme-gaming .game__winner-icon {
-  background: transparent;
-}
-
-.theme-gaming .game__winner-home {
-  border: 2px solid #ff4ea3;
-  background: transparent;
-  color: #f6f2e8;
-}
-
-.theme-foods {
-  background: linear-gradient(180deg, #ff8248 0%, #ef6936 100%);
-  color: #fff7ea;
-}
-
-.theme-foods .game__result-title {
-  color: #fff7ea;
-}
-
-.theme-foods .game__result-subtitle {
-  color: #fff7ea;
-}
-
-.theme-foods .game__result-score {
-  background: #fff3e2;
-  color: #84411f;
-}
-
-.theme-foods-blue,
-.theme-foods-orange,
-.theme-foods-draw {
-  background: #f8f5e8;
-}
-
-.theme-foods-blue .game__winner-subtitle,
-.theme-foods-orange .game__winner-subtitle,
-.theme-foods-draw .game__winner-subtitle {
-  color: #b6846f;
-}
-
-.theme-foods-blue .game__winner-icon,
-.theme-foods-orange .game__winner-icon,
-.theme-foods-draw .game__winner-icon {
-  background: #f7e8e4;
-}
-
-.theme-foods-blue .game__winner-home,
-.theme-foods-orange .game__winner-home,
-.theme-foods-draw .game__winner-home {
-  border: none;
-  background: #ef6a3a;
-  color: #fff7ea;
-}
-
-.winner-title-blue {
-  color: #3dbdff;
-}
-
-.winner-title-orange {
-  color: #ff7a3d;
-}
-
-.winner-title-draw {
-  color: #d2a94d;
-}
-
-.theme-foods-blue .winner-title-blue {
-  color: #1d63b8;
-}
-
-.theme-foods-orange .winner-title-orange {
-  color: #ef6a3a;
-}
-
-.theme-foods-draw .winner-title-draw {
-  color: #b48a39;
-}
-
-.theme-gaming .winner-title-blue {
-  color: #53cfff;
-  text-shadow: 0 0 18px rgba(83, 207, 255, 0.22);
-}
-
-.theme-gaming .winner-title-orange {
-  color: #ff7440;
-  text-shadow: 0 0 18px rgba(255, 116, 64, 0.22);
-}
-
-.theme-gaming .winner-title-draw {
-  color: #ffd36a;
+.game__player-icon {
+  width: 34px;
+  height: 34px;
+  display: block;
+  flex-shrink: 0;
+  margin-top: 6px;
 }
 
 @media (max-width: 900px) {
@@ -749,13 +425,6 @@
   }
 }
 
-#orangeScore {
-  color: #ff7a00;
-}
-
-#blueScore {
-  color: #1296f3;
-}
 @media (max-width: 480px) {
   .game__modal {
     position: fixed;
@@ -768,11 +437,11 @@
   .game__modal-box {
     width: 100%;
     min-height: 100dvh;
-    border-radius: 0;
     max-width: none;
     max-height: none;
     margin: 0;
     padding: 32px 24px 40px;
+    border-radius: 0;
     display: flex;
     flex-direction: column;
     align-items: center;

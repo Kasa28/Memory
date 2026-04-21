@@ -29,9 +29,9 @@ export function getWinner(): string {
 }
 
 export function getWinnerText(): string {
-  const w = getWinner();
-  if (w === "blue") return "Blue Player";
-  if (w === "orange") return "Orange Player";
+  const winner = getWinner();
+  if (winner === "blue") return "Blue Player";
+  if (winner === "orange") return "Orange Player";
   return "Draw";
 }
 
@@ -39,37 +39,96 @@ export function getScores(): { blue: number; orange: number } {
   return { blue: blueScore, orange: orangeScore };
 }
 
+export function updateWinnerDisplay(): void {
+  updateWinnerTitle();
+  updateWinnerIcons();
+}
+
+export function updateResultDisplay(): void {
+  updateResultScores();
+  updateResultIcons();
+}
+
+function updateWinnerTitle(): void {
+  const title = document.getElementById("winnerTitle");
+  if (title) title.textContent = getWinnerText();
+}
+
+function updateWinnerIcons(): void {
+  const blue = getImage("winnerBlueIcon");
+  const orange = getImage("winnerOrangeIcon");
+  if (!blue || !orange) return;
+  setWinnerIconSources(blue, orange);
+}
+
+function setWinnerIconSources(
+  blue: HTMLImageElement,
+  orange: HTMLImageElement
+): void {
+  blue.src = getFoodsWinnerIcon("blue");
+  orange.src = getFoodsWinnerIcon("orange");
+  blue.alt = "Blue Player";
+  orange.alt = "Orange Player";
+}
+
+function updateResultScores(): void {
+  const blue = document.getElementById("resultBlueScore");
+  const orange = document.getElementById("resultOrangeScore");
+  if (blue) blue.textContent = String(blueScore);
+  if (orange) orange.textContent = String(orangeScore);
+}
+
+function updateResultIcons(): void {
+  const blue = getImage("resultBlueIcon");
+  const orange = getImage("resultOrangeIcon");
+  if (!blue || !orange) return;
+  blue.src = getPlayerIcon("blue");
+  orange.src = getPlayerIcon("orange");
+  blue.alt = "Blue Player";
+  orange.alt = "Orange Player";
+}
+
 function updatePlayerDisplay(): void {
-  const el = document.getElementById("currentPlayerIcon") as HTMLImageElement | null;
-  if (!el) return;
-  el.src = getPlayerIcon(currentPlayer);
+  const icon = getImage("currentPlayerIcon");
+  if (!icon) return;
+  icon.src = getPlayerIcon(currentPlayer);
+  icon.alt = `${currentPlayer} player`;
 }
 
 function updateScoreDisplay(): void {
-  const b = document.getElementById("blueScore");
-  const o = document.getElementById("orangeScore");
-  if (b) b.textContent = String(blueScore);
-  if (o) o.textContent = String(orangeScore);
+  const blue = document.getElementById("blueScore");
+  const orange = document.getElementById("orangeScore");
+  if (blue) blue.textContent = String(blueScore);
+  if (orange) orange.textContent = String(orangeScore);
+}
+
+function updateScoreIcons(): void {
+  const orange = getImage("orangeScoreIcon");
+  const blue = getImage("blueScoreIcon");
+  if (!orange || !blue) return;
+  orange.src = getPlayerIcon("orange");
+  blue.src = getPlayerIcon("blue");
+}
+
+function getImage(id: string): HTMLImageElement | null {
+  return document.getElementById(id) as HTMLImageElement | null;
 }
 
 function getPlayerIcon(player: string): string {
   const base = import.meta.env.BASE_URL;
-  return player === "blue"
-    ? `${base}blue_player.svg`
-    : `${base}orange_player.svg`;
+  if (player === "orange") return `${base}currentOrange.svg`;
+  return `${base}blue_play.svg`;
 }
 
-function updateScoreIcons(): void {
+function getFoodsWinnerIcon(player: string): string {
   const base = import.meta.env.BASE_URL;
-  const o = document.getElementById("orangeScoreIcon") as HTMLImageElement | null;
-  const b = document.getElementById("blueScoreIcon") as HTMLImageElement | null;
-  if (o) o.src = `${base}orange_player.svg`;
-  if (b) b.src = `${base}blue_player.svg`;
+  if (player === "orange") return `${base}foods_winner_orange.svg`;
+  return `${base}foods_winner_blue.svg`;
 }
 
 function getCheckedValue(name: string): string {
-  const el = document.querySelector<HTMLInputElement>(
+  const input = document.querySelector<HTMLInputElement>(
     `input[name="${name}"]:checked`
   );
-  return el ? el.value : "";
+  return input ? input.value : "";
 }

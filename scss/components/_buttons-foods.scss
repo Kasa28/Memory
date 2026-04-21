@@ -1,0 +1,415 @@
+.theme-foods-board {
+  .game__exit {
+    width: 160px;
+    border: 2px solid #f08a2a;
+    background: transparent;
+    color: #f08a2a;
+    box-shadow: none;
+    gap: 14px;
+
+    &-icon {
+      width: 20px;
+      height: 20px;
+      background-color: currentColor;
+    }
+
+    &-text {
+      color: inherit;
+      font-family: "Almarai", sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    &:hover {
+      background: #f08a2a;
+      color: #ffffff;
+      box-shadow: 0 8px 18px rgba(240, 138, 42, 0.28);
+      transform: translateY(-1px);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow:
+        0 0 0 4px rgba(240, 138, 42, 0.18),
+        0 8px 18px rgba(240, 138, 42, 0.28);
+    }
+  }
+
+  .game__modal-box {
+    background: #fff4df;
+  }
+
+  .game__modal-text {
+    width: 376px;
+    max-width: 100%;
+    color: #a45212;
+    font-family: "Klee One", cursive;
+    font-weight: 600;
+    font-size: 2.8rem;
+    line-height: 4rem;
+    text-align: center;
+  }
+
+  .game__modal-actions {
+    gap: 18px;
+    flex-wrap: nowrap;
+  }
+
+  .game__modal-btn {
+    border: 2px solid #f28a2b;
+    font-family: "Almarai", sans-serif;
+  }
+
+  .game__modal-btn--back {
+    background: #ffab3e;
+    color: #fff4df;
+    box-shadow: 0 6px 14px rgba(240, 138, 42, 0.2);
+
+    &:hover {
+      background: #f3832d;
+      color: #ffffff;
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(240, 138, 42, 0.18);
+    }
+  }
+
+  .game__modal-btn--quit {
+    background: transparent;
+    color: #f28a2b;
+    border: 2px solid #f28a2b;
+    box-shadow: none;
+
+    &:hover {
+      background: #f28a2b;
+      color: #ffffff;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+      transform: translateY(-1px);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(240, 138, 42, 0.18);
+    }
+  }
+}
+
+
+
+.game__result {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(245, 243, 238, 0.96);
+
+  &.is-hidden {
+    display: none;
+  }
+}
+
+.game__result-box--winner {
+  width: min(900px, calc(100% - 64px));
+  min-height: 620px;
+  padding: 80px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.game__winner-subtitle {
+  margin: 0 0 12px;
+  color: #b45f12;
+  font-family: "Klee One", cursive;
+  font-size: 3rem;
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.game__winner-title {
+  margin: 0 0 40px;
+  color: #b45f12;
+  font-family: "Klee One", cursive;
+  font-size: 5.5rem;
+  font-weight: 400;
+  line-height: 1.05;
+  text-align: center;
+}
+
+.game__winner-icon {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  margin-bottom: 32px;
+}
+
+.game__winner-home {
+  min-width: 120px;
+  height: 48px;
+  padding: 0 24px;
+  border: none;
+  border-radius: 10px;
+  background: #f28a2e;
+  color: white;
+  font-family: "RedRose", sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .game__result-box--winner {
+    width: calc(100% - 32px);
+    min-height: 100dvh;
+    padding: 40px 20px;
+  }
+
+  .game__winner-subtitle {
+    font-size: 2.2rem;
+  }
+
+  .game__winner-title {
+    font-size: 4rem;
+  }
+
+  .game__winner-icon {
+    width: 140px;
+    height: 140px;
+  }
+}
+.game__winner-icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.game__winner-icon {
+  width: 160px;
+  height: 160px;
+  object-fit: contain;
+}
+
+.game__winner-icon.is-hidden {
+  display: none;
+}
+
+
+.game__result {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.game__result.is-hidden {
+  display: none;
+}
+
+.game__result-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.game__winner-icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.game__winner-icon.is-hidden {
+  display: none;
+}
+
+.theme-foods-board #gameEndScreen {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  padding: 0;
+  background: rgba(240, 237, 228, 0.92);
+  align-items: stretch;
+  justify-content: stretch;
+}
+
+.theme-foods-board #gameEndBox {
+  width: 100vw;
+  height: 100dvh;
+  min-height: 100dvh;
+  padding: 0;
+  background: #f28a2e;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.theme-foods-board .game__result-title {
+  margin: 0 0 72px;
+  color: #ffffff;
+  font-family: "Klee One", cursive;
+  font-size: clamp(72px, 9vw, 122px);
+  font-weight: 400;
+  line-height: 1;
+  text-align: center;
+}
+
+.theme-foods-board .game__result-subtitle {
+  margin: 0 0 28px;
+  color: #ffffff;
+  font-family: "Klee One", cursive;
+  font-size: clamp(28px, 3vw, 42px);
+  font-weight: 400;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.theme-foods-board .game__result-score {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 26px;
+  border-radius: 18px;
+  background: #f4f1eb;
+}
+
+.theme-foods-board .game__result-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.theme-foods-board #resultOrangeScore,
+.theme-foods-board #resultBlueScore {
+  font-family: "Almarai", sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.theme-foods-board #resultOrangeScore {
+  color: #e56b00;
+}
+
+.theme-foods-board #resultBlueScore {
+  color: #0d84d8;
+}
+
+.theme-foods-board #winnerScreen {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  background: white;
+}
+
+.theme-foods-board #winnerBox {
+  width: 100%;
+  max-width: 900px;
+  min-height: 100dvh;
+  padding: 56px 24px 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-foods-board .game__winner-subtitle {
+  margin: 0 0 16px;
+  color: #b45e0f;
+  font-family: "Klee One", cursive;
+  font-size: clamp(28px, 3vw, 42px);
+  font-weight: 400;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.theme-foods-board .game__winner-title {
+  margin: 0 0 32px;
+  color: #b45e0f;
+  font-family: "Klee One", cursive;
+  font-size: clamp(58px, 7vw, 108px);
+  font-weight: 400;
+  line-height: 1;
+  text-align: center;
+}
+
+.theme-foods-board .game__winner-icons {
+  min-height: 220px;
+  margin-bottom: 30px;
+  gap: 28px;
+}
+
+.theme-foods-board .game__winner-icon {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+}
+
+.theme-foods-board .winner-box--draw .game__winner-icon {
+  width: 150px;
+  height: 150px;
+}
+
+.theme-foods-board .game__winner-home {
+  min-width: 150px;
+  height: 58px;
+  padding: 0 28px;
+  border: none;
+  border-radius: 14px;
+  background: #f28a2e;
+  color: #ffffff;
+  font-family: "Almarai", sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(240, 138, 42, 0.24);
+}
+
+.theme-foods-board .game__winner-home:hover {
+  transform: translateY(-1px);
+}
+
+@media (max-width: 700px) {
+  .theme-foods-board .game__result-title {
+    margin-bottom: 48px;
+  }
+
+  .theme-foods-board .game__result-score {
+    padding: 14px 20px;
+  }
+
+  .theme-foods-board #winnerBox {
+    padding: 40px 20px 56px;
+  }
+
+  .theme-foods-board .game__winner-title {
+    margin-bottom: 24px;
+  }
+
+  .theme-foods-board .game__winner-icon {
+    width: 140px;
+    height: 140px;
+  }
+
+  .theme-foods-board .winner-box--draw .game__winner-icon {
+    width: 120px;
+    height: 120px;
+  }
+
+  .theme-foods-board .game__winner-home {
+    min-width: 132px;
+    height: 52px;
+    font-size: 22px;
+  }
+}

@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Memory Spiel</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
   </head>
   <body>
     <main class="memory-page">
@@ -134,10 +135,8 @@
               <div class="settings__summary-info">
                 <span id="summaryTheme">Game theme</span>
                 <img src="/2_line_diagonal.svg" class="settings__divider" alt="" />
-
                 <span id="summaryPlayer">Player</span>
                 <img src="/2_line_diagonal.svg" class="settings__divider" alt="" />
-
                 <span id="summarySize">Board size</span>
               </div>
 
@@ -168,19 +167,19 @@
         <div class="game__topbar">
           <div class="game__scores">
             <div class="game__score-box">
-              <img id="orangeScoreIcon" alt="" class="game__score-icon" />
+              <img id="orangeScoreIcon" class="game__score-icon" src="" alt="" />
               <span id="orangeScore">0</span>
             </div>
 
             <div class="game__score-box">
-              <img id="blueScoreIcon" alt="" class="game__score-icon" />
+              <img id="blueScoreIcon" class="game__score-icon" src="" alt="" />
               <span id="blueScore">0</span>
             </div>
           </div>
 
           <div class="game__current-player">
             <span>Current player:</span>
-            <img id="currentPlayerIcon" class="game__player-icon" alt="" />
+            <img id="currentPlayerIcon" class="game__player-icon" src="" alt="" />
           </div>
 
           <button class="game__exit" id="exitGameBtn" type="button">
@@ -209,7 +208,7 @@
                 id="confirmExitBtn"
                 type="button"
               >
-                Yes, quit game
+                Exit game
               </button>
             </div>
           </div>
@@ -217,15 +216,14 @@
 
         <div class="game__result is-hidden" id="gameEndScreen">
           <div class="game__result-box game__result-box--end" id="gameEndBox">
-            <h2 class="game__result-title">GAME END</h2>
+            <h2 class="game__result-title">GAME OVER</h2>
             <p class="game__result-subtitle">Final score</p>
 
             <div class="game__result-score">
-              <img id="resultBlueIcon" class="game__result-icon" alt="" />
-              <span id="resultBlueScore">0</span>
-              <span>-</span>
+              <img id="resultOrangeIcon" class="game__result-icon" src="" alt="" />
               <span id="resultOrangeScore">0</span>
-              <img id="resultOrangeIcon" class="game__result-icon" alt="" />
+              <img id="resultBlueIcon" class="game__result-icon" src="" alt="" />
+              <span id="resultBlueScore">0</span>
             </div>
           </div>
         </div>
@@ -234,7 +232,22 @@
           <div class="game__result-box game__result-box--winner" id="winnerBox">
             <p class="game__winner-subtitle">The winner is</p>
             <h2 class="game__winner-title" id="winnerTitle">Blue Player</h2>
-            <img id="winnerIcon" src="/trophy.svg" alt="" class="game__winner-icon" />
+
+            <div class="game__winner-icons" id="winnerIcons">
+              <img
+                id="winnerOrangeIcon"
+                src=""
+                alt=""
+                class="game__winner-icon is-hidden"
+              />
+              <img
+                id="winnerBlueIcon"
+                src=""
+                alt=""
+                class="game__winner-icon is-hidden"
+              />
+            </div>
+
             <button class="game__winner-home" id="winnerHomeBtn" type="button">
               Home
             </button>

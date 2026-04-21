@@ -1,0 +1,79 @@
+.theme-gaming-board {
+  .game__exit {
+    border: 4px solid #ff0f63;
+    background: #5f6482;
+
+    &-icon {
+      background-color: #f6f2ee;
+    }
+
+    &-text {
+      color: #f6f2ee;
+      font-family: "Orbitron", sans-serif;
+      font-size: 1rem;
+    }
+
+    &:hover {
+      background: #666c8b;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.14);
+
+      .game__exit-icon {
+        background-color: #ff0f63;
+      }
+
+      .game__exit-text {
+        color: #ffffff;
+      }
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow:
+        0 0 0 4px rgba(255, 15, 99, 0.18),
+        0 8px 18px rgba(0, 0, 0, 0.14);
+    }
+  }
+
+  .game__modal-box {
+    background: #d9dee3;
+  }
+
+  .game__modal-text {
+    color: #2d5b70;
+    font-family: "Orbitron", sans-serif;
+  }
+
+  .game__modal-btn {
+    border: 2px solid #ff0f63;
+    font-family: "Orbitron", sans-serif;
+  }
+
+  .game__modal-btn--back {
+    background: #ff0f63;
+    color: #ffffff;
+    box-shadow: 0 6px 14px rgba(255, 15, 99, 0.2);
+
+    &:hover {
+      background: #ff2a76;
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(255, 15, 99, 0.18);
+    }
+  }
+
+  .game__modal-btn--quit {
+    background: transparent;
+    color: #ff0f63;
+
+    &:hover {
+      background: rgba(255, 15, 99, 0.08);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(255, 15, 99, 0.18);
+    }
+  }
+}
