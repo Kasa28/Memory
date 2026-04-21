@@ -258,3 +258,43 @@
 .settings__indicator  {
   filter: brightness(0) saturate(100%) invert(78%) sepia(32%) saturate(500%) hue-rotate(10deg);
 }
+
+.settings__preview {
+  position: relative;
+  overflow: hidden;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-repeat: no-repeat;
+    transition: opacity 220ms ease;
+    pointer-events: none;
+  }
+
+  &::before {
+    background-image: var(--preview-current-image);
+    background-size: var(--preview-current-size, contain);
+    background-position: var(--preview-current-position, center);
+    opacity: 1;
+  }
+
+  &::after {
+    background-image: var(--preview-next-image);
+    background-size: var(--preview-next-size, contain);
+    background-position: var(--preview-next-position, center);
+    opacity: 0;
+  }
+
+  &.is-preview-switching {
+    &::before {
+      opacity: 0;
+    }
+
+    &::after {
+      opacity: 1;
+    }
+  }
+}

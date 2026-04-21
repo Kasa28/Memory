@@ -99,6 +99,7 @@ function setupCardFlip(): void {
 function setupSettings(): void {
   setupThemePreview();
   setupSummary();
+  setupSettingsHoverPreview();
   updatePreview();
   updateSummary();
   updateStartButton();
@@ -129,6 +130,20 @@ function handleSettingsChange(): void {
   updateStartButton();
 }
 
+function setupSettingsHoverPreview(): void {
+  const themeInputs = Array.from(
+    document.querySelectorAll<HTMLInputElement>('input[name="theme"]')
+  );
+
+  themeInputs.forEach((input) => {
+    const option = input.closest(".settings__option");
+    if (!option) return;
+
+    option.addEventListener("mouseenter", () => updatePreviewFromHover(input.value));
+    option.addEventListener("mouseleave", updatePreview);
+  });
+}
+
 function updateStartButton(): void {
   const startBtn = document.getElementById("startBtn") as HTMLButtonElement | null;
   if (!startBtn) return;
@@ -156,14 +171,58 @@ function getCheckedValue(name: string): string {
 }
 
 function updatePreview(): void {
-  const preview = document.getElementById("preview");
-  const theme = getCheckedValue("theme");
+  updatePreviewFromState(getCheckedValue("theme"));
+}
 
+function updatePreviewFromHover(theme: string): void {
+  updatePreviewFromState(theme);
+}
+
+function updatePreviewFromState(theme: string): void {
+  const preview = document.getElementById("preview") as HTMLElement | null;
   if (!preview || !theme) return;
-  preview.style.backgroundImage = `url(${getPreviewImage(theme)})`;
-  preview.style.backgroundSize = "contain";
-  preview.style.backgroundPosition = "center";
-  preview.style.backgroundRepeat = "no-repeat";
+
+  const image = `url(${getPreviewImage(theme)})`;
+  const currentImage = preview.style.getPropertyValue("--preview-current-image").trim();
+
+  if (!currentImage) {
+    setPreviewState(preview, image);
+    setPreviewNext(preview, image);
+    return;
+  }
+
+  const isThemeChange = hasThemeChanged(currentImage, theme);
+
+  if (!isThemeChange) {
+    setPreviewState(preview, image);
+    setPreviewNext(preview, image);
+    return;
+  }
+
+  setPreviewNext(preview, image);
+  preview.classList.add("is-preview-switching");
+
+  window.setTimeout(() => {
+    setPreviewState(preview, image);
+    preview.classList.remove("is-preview-switching");
+  }, 220);
+}
+
+function setPreviewState(preview: HTMLElement, image: string): void {
+  preview.style.setProperty("--preview-current-image", image);
+  preview.style.setProperty("--preview-current-size", "contain");
+  preview.style.setProperty("--preview-current-position", "center");
+}
+
+function setPreviewNext(preview: HTMLElement, image: string): void {
+  preview.style.setProperty("--preview-next-image", image);
+  preview.style.setProperty("--preview-next-size", "contain");
+  preview.style.setProperty("--preview-next-position", "center");
+}
+
+function hasThemeChanged(currentImage: string, theme: string): boolean {
+  const currentTheme = currentImage.includes("Theme_gaming.svg") ? "gaming" : "foods";
+  return currentTheme !== theme;
 }
 
 function getPreviewImage(theme: string): string {
