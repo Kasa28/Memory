@@ -756,3 +756,49 @@
 #blueScore {
   color: #1296f3;
 }
+@media (max-width: 480px) {
+  .game__modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    background: #d9dde5;
+  }
+
+  .game__modal-box {
+    width: 100%;
+    min-height: 100dvh;
+    border-radius: 0;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 32px 24px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    box-shadow: none;
+  }
+
+  .game__modal-text {
+    margin: 0;
+    max-width: 260px;
+    text-align: center;
+    font-size: clamp(2.2rem, 8vw, 3.4rem);
+    line-height: 1.1;
+  }
+
+  .game__modal-actions {
+    width: 100%;
+    max-width: 240px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .game__modal-btn {
+    width: 100%;
+    min-height: 52px;
+  }
+}
