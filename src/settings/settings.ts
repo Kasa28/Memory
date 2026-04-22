@@ -1,3 +1,19 @@
+type PreviewLayout = {
+  size: string;
+  position: string;
+};
+
+type PreviewConfig = {
+  image: string;
+  size: string;
+  position: string;
+  theme: string;
+};
+
+const PREVIEW_SWITCH_MS = 320;
+let previewSwitchTimeout = 0;
+let activePreviewTheme = "";
+
 export function initSettings(): void {
   setupHero();
   setupGameStart();
@@ -31,12 +47,16 @@ function startGame(settingsRef: HTMLElement, gameRef: HTMLElement): void {
 }
 
 function setupThemePreview(): void {
-  const radios = getRadios("theme");
-  radios.forEach((radio) => radio.addEventListener("change", handleThemeChange));
+  getRadios("theme").forEach(addThemeChangeListener);
+}
+
+function addThemeChangeListener(radio: HTMLInputElement): void {
+  radio.addEventListener("change", handleThemeChange);
 }
 
 function handleThemeChange(): void {
-  updatePreview();
+  const theme = getCheckedValue("theme");
+  if (theme && theme !== activePreviewTheme) updatePreviewFromState(theme);
   updateSummary();
   updateStartButton();
 }
@@ -46,8 +66,11 @@ function setupSummary(): void {
 }
 
 function addSummaryListeners(name: string): void {
-  const radios = getRadios(name);
-  radios.forEach((radio) => radio.addEventListener("change", handleSettingsChange));
+  getRadios(name).forEach(addSettingsChangeListener);
+}
+
+function addSettingsChangeListener(radio: HTMLInputElement): void {
+  radio.addEventListener("change", handleSettingsChange);
 }
 
 function handleSettingsChange(): void {
@@ -56,15 +79,25 @@ function handleSettingsChange(): void {
 }
 
 function setupSettingsHoverPreview(): void {
-  const inputs = getRadios("theme");
-  inputs.forEach(addHoverPreviewListeners);
+  getRadios("theme").forEach(addHoverPreviewListeners);
 }
 
 function addHoverPreviewListeners(input: HTMLInputElement): void {
   const option = input.closest(".settings__option");
   if (!option) return;
-  option.addEventListener("mouseenter", () => updatePreviewFromHover(input.value));
-  option.addEventListener("mouseleave", updatePreview);
+  option.addEventListener("mouseenter", () => handlePreviewEnter(input.value));
+  option.addEventListener("mouseleave", handlePreviewLeave);
+}
+
+function handlePreviewEnter(theme: string): void {
+  if (!theme || theme === activePreviewTheme) return;
+  updatePreviewFromState(theme);
+}
+
+function handlePreviewLeave(): void {
+  const theme = getCheckedValue("theme");
+  if (!theme || theme === activePreviewTheme) return;
+  updatePreviewFromState(theme);
 }
 
 function updateStartButton(): void {
@@ -94,10 +127,8 @@ function getCheckedValue(name: string): string {
 }
 
 function updatePreview(): void {
-  updatePreviewFromState(getCheckedValue("theme"));
-}
-
-function updatePreviewFromHover(theme: string): void {
+  const theme = getCheckedValue("theme");
+  if (!theme) return;
   updatePreviewFromState(theme);
 }
 
@@ -106,7 +137,7 @@ function updatePreviewFromState(theme: string): void {
   const currentImage = getCurrentPreviewImage(preview);
   if (!preview || !theme) return;
   if (!currentImage) return setInitialPreview(preview, theme);
-  if (!hasThemeChanged(currentImage, theme)) return syncPreview(preview, theme);
+  if (theme === activePreviewTheme) return syncPreview(preview, theme);
   switchPreview(preview, theme);
 }
 
@@ -120,34 +151,47 @@ function getCurrentPreviewImage(preview: HTMLElement | null): string {
 }
 
 function setInitialPreview(preview: HTMLElement, theme: string): void {
+  activePreviewTheme = theme;
   setPreviewState(preview, theme);
   setPreviewNext(preview, theme);
 }
 
 function syncPreview(preview: HTMLElement, theme: string): void {
+  activePreviewTheme = theme;
+  preview.classList.add("is-preview-syncing");
   setPreviewState(preview, theme);
   setPreviewNext(preview, theme);
+  requestAnimationFrame(() => removePreviewSync(preview));
 }
 
 function switchPreview(preview: HTMLElement, theme: string): void {
+  activePreviewTheme = theme;
+  window.clearTimeout(previewSwitchTimeout);
   setPreviewNext(preview, theme);
   preview.classList.add("is-preview-switching");
-  window.setTimeout(() => finishPreviewSwitch(preview, theme), 220);
+  previewSwitchTimeout = window.setTimeout(() => {
+    finishPreviewSwitch(preview, theme);
+  }, PREVIEW_SWITCH_MS);
 }
 
 function finishPreviewSwitch(preview: HTMLElement, theme: string): void {
+  preview.classList.add("is-preview-syncing");
   setPreviewState(preview, theme);
+  setPreviewNext(preview, theme);
   preview.classList.remove("is-preview-switching");
+  requestAnimationFrame(() => removePreviewSync(preview));
+}
+
+function removePreviewSync(preview: HTMLElement): void {
+  preview.classList.remove("is-preview-syncing");
 }
 
 function setPreviewState(preview: HTMLElement, theme: string): void {
-  const config = getPreviewConfig(theme);
-  applyPreviewVars(preview, "current", config);
+  applyPreviewVars(preview, "current", getPreviewConfig(theme));
 }
 
 function setPreviewNext(preview: HTMLElement, theme: string): void {
-  const config = getPreviewConfig(theme);
-  applyPreviewVars(preview, "next", config);
+  applyPreviewVars(preview, "next", getPreviewConfig(theme));
 }
 
 function applyPreviewVars(
@@ -158,32 +202,28 @@ function applyPreviewVars(
   preview.style.setProperty(`--preview-${type}-image`, `url(${config.image})`);
   preview.style.setProperty(`--preview-${type}-size`, config.size);
   preview.style.setProperty(`--preview-${type}-position`, config.position);
+  preview.style.setProperty(`--preview-${type}-theme`, config.theme);
 }
 
 function getPreviewConfig(theme: string): PreviewConfig {
   const image = getPreviewImage(theme);
   const settings = getPreviewLayout(theme);
-  return { image, size: settings.size, position: settings.position };
+  return { image, size: settings.size, position: settings.position, theme };
 }
 
 function getPreviewLayout(theme: string): PreviewLayout {
   const layouts: Record<string, PreviewLayout> = {
     gaming: { size: "90%", position: "right center" },
-    foods: { size: "90%", position: "right center" },
+    foods: { size: "90%", position: "right center" }
   };
   return layouts[theme] || { size: "contain", position: "center" };
-}
-
-function hasThemeChanged(currentImage: string, theme: string): boolean {
-  const currentTheme = currentImage.includes("Theme_gaming.svg") ? "gaming" : "foods";
-  return currentTheme !== theme;
 }
 
 function getPreviewImage(theme: string): string {
   const base = import.meta.env.BASE_URL;
   const images: Record<string, string> = {
     gaming: `${base}Theme_gaming.svg`,
-    foods: `${base}Theme_food.svg`,
+    foods: `${base}Theme_food.svg`
   };
   return images[theme] || "";
 }
@@ -196,27 +236,25 @@ function updateSummary(): void {
 
 function updateThemeSummary(): void {
   const theme = getCheckedValue("theme");
-  const labels: Record<string, string> = getThemeLabels();
-  updateText("summaryTheme", labels[theme] || "Game theme");
+  updateText("summaryTheme", getThemeLabels()[theme] || "Game theme");
 }
 
 function getThemeLabels(): Record<string, string> {
   return {
     gaming: "Gaming Theme",
-    foods: "Foods Theme",
+    foods: "Foods Theme"
   };
 }
 
 function updatePlayerSummary(): void {
   const player = getCheckedValue("player");
-  const labels: Record<string, string> = getPlayerLabels();
-  updateText("summaryPlayer", labels[player] || "Player");
+  updateText("summaryPlayer", getPlayerLabels()[player] || "Player");
 }
 
 function getPlayerLabels(): Record<string, string> {
   return {
     blue: "Blue Player",
-    orange: "Orange Player",
+    orange: "Orange Player"
   };
 }
 
@@ -236,14 +274,3 @@ function toggleView(hideEl: HTMLElement, showEl: HTMLElement): void {
   hideEl.classList.add("is-hidden");
   showEl.classList.remove("is-hidden");
 }
-
-type PreviewLayout = {
-  size: string;
-  position: string;
-};
-
-type PreviewConfig = {
-  image: string;
-  size: string;
-  position: string;
-};

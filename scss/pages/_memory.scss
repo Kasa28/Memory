@@ -181,52 +181,59 @@
     align-items: stretch;
   }
 
-  &__preview {
-    width: 100%;
-    min-height: 500px;
-    border-radius: 20px;
-    margin-bottom: 18px;
-    padding: 0;
-    box-sizing: border-box;
-    position: relative;
-    overflow: hidden;
-    flex-shrink: 0;
+&__preview {
+  width: 100%;
+  min-height: 500px;
+  border-radius: 20px;
+  margin-bottom: 18px;
+  padding: 0;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
 
-    &::before,
-    &::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background-repeat: no-repeat;
-      transition: opacity 220ms ease;
-      pointer-events: none;
-    }
-
-    &::before {
-      background-image: var(--preview-current-image);
-      background-size: var(--preview-current-size, contain);
-      background-position: var(--preview-current-position, center);
-      opacity: 1;
-    }
-
-    &::after {
-      background-image: var(--preview-next-image);
-      background-size: var(--preview-next-size, contain);
-      background-position: var(--preview-next-position, center);
-      opacity: 0;
-    }
-
-    &.is-preview-switching {
-      &::before {
-        opacity: 0;
-      }
-
-      &::after {
-        opacity: 1;
-      }
-    }
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    will-change: opacity, transform;
   }
+
+  &::before {
+    background-image: var(--preview-current-image);
+    background-size: var(--preview-current-size, contain);
+    background-position: var(--preview-current-position, center);
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  &::after {
+    background-image: var(--preview-next-image);
+    background-size: var(--preview-next-size, contain);
+    background-position: var(--preview-next-position, center);
+    opacity: 0;
+    transform: scale(1.015);
+  }
+
+  &.is-preview-switching::before {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+
+  &.is-preview-switching::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  &.is-preview-syncing::before,
+  &.is-preview-syncing::after {
+    transition: none;
+  }
+}
 
   &__summary {
     width: 100%;

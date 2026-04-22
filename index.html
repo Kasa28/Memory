@@ -59,110 +59,111 @@
       </section>
 
       <section class="settings is-hidden" id="settings">
-        <div class="settings__left">
-          <h2 class="settings__title">Settings</h2>
-          <img src="/linie_3.svg" class="settings_three" alt="pfeil icon">
+  <div class="settings__content">
+    <div class="settings__left">
+      <h2 class="settings__title">Settings</h2>
+      <img src="/linie_3.svg" class="settings_three" alt="pfeil icon">
 
-          <div class="settings__group">
-            <h3 class="settings__heading">
-              <img src="/palette.svg" alt="" class="settings__icon">
-              <span>Game themes</span>
-            </h3>
+      <div class="settings__group">
+        <h3 class="settings__heading">
+          <img src="/palette.svg" alt="" class="settings__icon">
+          <span>Game themes</span>
+        </h3>
 
-            <label class="settings__option">
-              <input type="radio" name="theme" value="foods" checked>
-              <span>Foods theme</span>
-              <img src="/Line.svg" class="settings__indicator" alt="pfeil icon">
-            </label>
+        <label class="settings__option">
+          <input type="radio" name="theme" value="foods" checked>
+          <span>Foods theme</span>
+          <img src="/Line.svg" class="settings__indicator" alt="pfeil icon">
+        </label>
 
-            <label class="settings__option">
-              <input type="radio" name="theme" value="gaming">
-              <span>Gaming theme</span>
-              <img src="/Line.svg" class="settings__indicator" alt="pfeil icon">
-            </label>
+        <label class="settings__option">
+          <input type="radio" name="theme" value="gaming">
+          <span>Gaming theme</span>
+          <img src="/Line.svg" class="settings__indicator" alt="pfeil icon">
+        </label>
+      </div>
+
+      <div class="settings__group">
+        <h3 class="settings__heading">
+          <img src="/chess_pawn.svg" alt="" class="settings__icon">
+          <span>Choose player</span>
+        </h3>
+
+        <label class="settings__option">
+          <input type="radio" name="player" value="blue">
+          <span>Blue</span>
+          <img src="/Line.svg" class="settings__indicator" alt="pfeil icon">
+        </label>
+
+        <label class="settings__option">
+          <input type="radio" name="player" value="orange">
+          <span>Orange</span>
+          <img src="/Line.svg" class="settings__indicator" alt="pfeil icon">
+        </label>
+      </div>
+
+      <div class="settings__group">
+        <h3 class="settings__heading">
+          <img src="/style.svg" alt="" class="settings__icon">
+          <span>Board size</span>
+        </h3>
+
+        <label class="settings__option">
+          <input type="radio" name="size" value="16">
+          <span>16 cards</span>
+          <img src="/Line.svg" class="settings__indicator" alt="pfeil icon">
+        </label>
+
+        <label class="settings__option">
+          <input type="radio" name="size" value="24">
+          <span>24 cards</span>
+          <img src="/Line.svg" class="settings__indicator" alt="pfeil icon">
+        </label>
+
+        <label class="settings__option">
+          <input type="radio" name="size" value="36">
+          <span>36 cards</span>
+          <img src="/Line.svg" class="settings__indicator" alt="pfeil icon">
+        </label>
+      </div>
+    </div>
+
+    <div class="settings__right">
+      <div class="settings__panel">
+        <div class="settings__preview" id="preview"></div>
+
+        <div class="settings__summary">
+          <div class="settings__summary-info">
+            <span id="summaryTheme">Game theme</span>
+            <img src="/2_line_diagonal.svg" class="settings__divider" alt="pfeil icon">
+            <span id="summaryPlayer">Player</span>
+            <img src="/2_line_diagonal.svg" class="settings__divider" alt="pfeil icon">
+            <span id="summarySize">Board size</span>
           </div>
 
-          <div class="settings__group">
-            <h3 class="settings__heading">
-              <img src="/chess_pawn.svg" alt="" class="settings__icon">
-              <span>Choose player</span>
-            </h3>
-
-            <label class="settings__option">
-              <input type="radio" name="player" value="blue">
-              <span>Blue</span>
-              <img src="/Line.svg" class="settings__indicator" alt="pfeil icon">
-            </label>
-
-            <label class="settings__option">
-              <input type="radio" name="player" value="orange">
-              <span>Orange</span>
-              <img src="/Line.svg" class="settings__indicator" alt="pfeil icon">
-            </label>
-          </div>
-
-          <div class="settings__group">
-            <h3 class="settings__heading">
-              <img src="/style.svg" alt="" class="settings__icon">
-              <span>Board size</span>
-            </h3>
-
-            <label class="settings__option">
-              <input type="radio" name="size" value="16">
-              <span>16 cards</span>
-              <img src="/Line.svg" class="settings__indicator" alt="pfeil icon">
-            </label>
-
-            <label class="settings__option">
-              <input type="radio" name="size" value="24" />
-              <span>24 cards</span>
-              <img src="/Line.svg" class="settings__indicator" alt="pfeil icon">
-            </label>
-
-            <label class="settings__option">
-              <input type="radio" name="size" value="36">
-              <span>36 cards</span>
-              <img src="/Line.svg" class="settings__indicator" alt="pfeil icon">
-            </label>
-          </div>
+          <button class="settings__start" id="startBtn" disabled>
+            <span class="settings__start-play" aria-hidden="true">
+              <svg viewBox="0 0 24 18" xmlns="http://www.w3.org/2000/svg">
+                <rect
+                  x="1.5"
+                  y="1.5"
+                  width="21"
+                  height="15"
+                  rx="2"
+                  fill="none"
+                  stroke="#2F2F2F"
+                  stroke-width="2"
+                />
+                <path d="M10 6.5L15 9L10 11.5V6.5Z" fill="#2F2F2F" />
+              </svg>
+            </span>
+            <span class="settings__start-text">Start</span>
+          </button>
         </div>
-
-        <div class="settings__right">
-          <div class="settings__panel">
-            <div class="settings__preview" id="preview"></div>
-
-            <div class="settings__summary">
-              <div class="settings__summary-info">
-                <span id="summaryTheme">Game theme</span>
-                <img src="/2_line_diagonal.svg" class="settings__divider" alt="pfeil icon">
-                <span id="summaryPlayer">Player</span>
-                <img src="/2_line_diagonal.svg" class="settings__divider" alt="pfeil icon">
-                <span id="summarySize">Board size</span>
-              </div>
-
-              <button class="settings__start" id="startBtn" disabled>
-                <span class="settings__start-play" aria-hidden="true">
-                  <svg viewBox="0 0 24 18" xmlns="http://www.w3.org/2000/svg">
-                    <rect
-                      x="1.5"
-                      y="1.5"
-                      width="21"
-                      height="15"
-                      rx="2"
-                      fill="none"
-                      stroke="#2F2F2F"
-                      stroke-width="2"
-                    />
-                    <path d="M10 6.5L15 9L10 11.5V6.5Z" fill="#2F2F2F" />
-                  </svg>
-                </span>
-                <span class="settings__start-text">Start</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
+      </div>
+    </div>
+  </div>
+</section>
       <section class="game is-hidden" id="game">
         <div class="game__topbar">
           <div class="game__scores">

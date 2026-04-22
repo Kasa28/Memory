@@ -189,3 +189,41 @@
     }
   }
 }
+.settings {
+  min-height: 100vh;
+  padding: 0 40px;
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+
+  &__content {
+    width: 100%;
+    max-width: 1440px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  &__left {
+    width: 100%;
+    max-width: 282px;
+    flex-shrink: 0;
+    padding-top: 61px;
+  }
+
+  &__right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding-top: 153px;
+    padding-left: 40px;
+  }
+}
+
+
+
+.settings__option input:checked + span + .settings__indicator {
+  opacity: 1;
+  visibility: visible;
+}
