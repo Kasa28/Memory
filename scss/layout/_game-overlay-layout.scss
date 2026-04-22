@@ -264,3 +264,21 @@
     padding: 18px;
   }
 }
+
+.settings__option--theme:hover .settings__indicator,
+.settings__option--theme.is-preview-active .settings__indicator {
+  display: block;
+}
+
+.settings__option--theme:hover span,
+.settings__option--theme.is-preview-active span,
+.settings__option--theme input:checked + span {
+  font-weight: 700;
+  color: #2f2f2f;
+}
+
+.settings__option--theme:hover input::after,
+.settings__option--theme.is-preview-active input::after,
+.settings__option--theme input:checked::after {
+  transform: translate(-50%, -50%) scale(1);
+}

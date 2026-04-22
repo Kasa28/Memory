@@ -12,6 +12,7 @@ type PreviewConfig = {
 
 const BASE_URL = import.meta.env.BASE_URL;
 const PREVIEW_SWITCH_MS = 320;
+const ACTIVE_PREVIEW_CLASS = "is-preview-active";
 const PREVIEW_LAYOUTS: Record<string, PreviewLayout> = {
   gaming: { size: "90%", position: "right center" },
   foods: { size: "90%", position: "right center" }
@@ -33,6 +34,7 @@ let activePreviewTheme = "";
 export function initPreview(): void {
   setupThemePreview();
   setupSettingsHoverPreview();
+  restoreCheckedThemeState();
 }
 
 /**
@@ -44,6 +46,7 @@ export function updatePreview(): void {
   const theme = getCheckedValue("theme");
   if (!theme) return;
   updatePreviewFromState(theme);
+  restoreCheckedThemeState();
 }
 
 /**
@@ -72,8 +75,9 @@ function addThemeChangeListener(radio: HTMLInputElement): void {
  */
 function handleThemeChange(): void {
   const theme = getCheckedValue("theme");
-  if (!theme || theme === activePreviewTheme) return;
+  if (!theme) return;
   updatePreviewFromState(theme);
+  restoreCheckedThemeState();
 }
 
 /**
@@ -94,19 +98,25 @@ function setupSettingsHoverPreview(): void {
 function addHoverPreviewListeners(input: HTMLInputElement): void {
   const option = input.closest(".settings__option");
   if (!option) return;
-  option.addEventListener("mouseenter", () => handlePreviewEnter(input.value));
+  option.addEventListener("mouseenter", () => handlePreviewEnter(input, option));
   option.addEventListener("mouseleave", handlePreviewLeave);
 }
 
 /**
  * Handles preview enter state.
  *
- * @param {string} theme
+ * @param {HTMLInputElement} input
+ * @param {Element} option
  * @returns {void}
  */
-function handlePreviewEnter(theme: string): void {
-  if (!theme || theme === activePreviewTheme) return;
-  updatePreviewFromState(theme);
+function handlePreviewEnter(
+  input: HTMLInputElement,
+  option: Element
+): void {
+  clearThemePreviewState();
+  option.classList.add(ACTIVE_PREVIEW_CLASS);
+  if (!input.value || input.value === activePreviewTheme) return;
+  updatePreviewFromState(input.value);
 }
 
 /**
@@ -115,9 +125,35 @@ function handlePreviewEnter(theme: string): void {
  * @returns {void}
  */
 function handlePreviewLeave(): void {
+  restoreCheckedThemeState();
   const theme = getCheckedValue("theme");
   if (!theme || theme === activePreviewTheme) return;
   updatePreviewFromState(theme);
+}
+
+/**
+ * Clears all active preview states.
+ *
+ * @returns {void}
+ */
+function clearThemePreviewState(): void {
+  document
+    .querySelectorAll(".settings__option--theme")
+    .forEach((option) => option.classList.remove(ACTIVE_PREVIEW_CLASS));
+}
+
+/**
+ * Restores active state to the checked theme.
+ *
+ * @returns {void}
+ */
+function restoreCheckedThemeState(): void {
+  clearThemePreviewState();
+  const checked = document.querySelector<HTMLInputElement>(
+    'input[name="theme"]:checked'
+  );
+  const option = checked?.closest(".settings__option--theme");
+  option?.classList.add(ACTIVE_PREVIEW_CLASS);
 }
 
 /**
