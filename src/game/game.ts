@@ -4,7 +4,6 @@ import {
   switchPlayer,
   addPoint,
   getWinner,
-  getWinnerText,
   updateWinnerDisplay,
   updateResultDisplay
 } from "./state";
@@ -91,18 +90,15 @@ function checkGameEnd(): void {
   const matched = document.querySelectorAll(".card.matched");
   const size = Number(getCheckedValue("size"));
   if (matched.length !== size) return;
-  showEndFlow();
+  lockBoard = true;
+  setTimeout(showEndFlow, 1000);
 }
 
 function showEndFlow(): void {
-  if (isFoodsTheme()) {
-    showFoodsEnd();
-    return;
-  }
-  showWinner();
+  showGameEndScreen();
 }
 
-function showFoodsEnd(): void {
+function showGameEndScreen(): void {
   updateResultDisplay();
   document.getElementById("gameEndScreen")?.classList.remove("is-hidden");
 
@@ -170,8 +166,6 @@ function setWinnerColors(): void {
     "winner-title--draw"
   );
 
-  if (!isGamingTheme()) return;
-
   const winner = getWinner();
   if (winner === "blue") title.classList.add("winner-title--blue");
   if (winner === "orange") title.classList.add("winner-title--orange");
@@ -183,7 +177,6 @@ function setupExitGame(): void {
   const cancel = document.getElementById("cancelExitBtn");
   const confirm = document.getElementById("confirmExitBtn");
   if (!exit || !cancel || !confirm) return;
-
   exit.addEventListener("click", openExitModal);
   cancel.addEventListener("click", closeExitModal);
   confirm.addEventListener("click", quitGame);

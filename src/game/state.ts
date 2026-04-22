@@ -17,8 +17,14 @@ export function switchPlayer(): void {
 }
 
 export function addPoint(): void {
-  if (currentPlayer === "blue") blueScore++;
-  if (currentPlayer === "orange") orangeScore++;
+  if (currentPlayer === "blue") {
+    blueScore++;
+  } else if (currentPlayer === "orange") {
+    orangeScore++;
+  } else {
+    console.warn("Invalid player value:", currentPlayer);
+  }
+
   updateScoreDisplay();
 }
 
