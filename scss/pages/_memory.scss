@@ -1,10 +1,10 @@
-.is-hidden {
-  display: none !important;
-}
-
 .memory-page {
   display: flex;
   flex-direction: column;
+}
+
+.is-hidden {
+  display: none !important;
 }
 
 .hero {
@@ -62,9 +62,8 @@
 
   &__left {
     width: 100%;
-    max-width: 360px;
-    flex-shrink: 0;
     max-width: 282px;
+    flex-shrink: 0;
     padding-left: 40px;
     padding-top: 61px;
   }
@@ -149,10 +148,6 @@
     height: auto;
     margin-left: 6px;
     pointer-events: none;
-  }
-
-  &__option input:checked + span + .settings__indicator {
-    display: block;
   }
 
   &__right {
@@ -270,6 +265,10 @@
   letter-spacing: 0.2px;
 }
 
+.settings__option input:checked + span + .settings__indicator {
+  display: block;
+}
+
 .settings__divider,
 .settings_three,
 .settings__indicator {
@@ -305,38 +304,6 @@
     background-color: #545d75;
   }
 
-  &__scores {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 10px 16px;
-    border-radius: 12px;
-  }
-
-  &__score-box {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 2rem;
-    font-weight: 700;
-  }
-
-  &__score-icon,
-  &__player-icon {
-    width: 22px;
-    height: 22px;
-    object-fit: contain;
-    display: block;
-  }
-
-  &__current-player {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 2rem;
-    font-weight: 700;
-  }
-
   &__board {
     display: grid;
     grid-template-columns: repeat(4, 110px);
@@ -344,275 +311,5 @@
     justify-content: center;
     width: 100%;
     max-width: 520px;
-  }
-
-  &__modal {
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-  }
-
-  &__modal-box {
-    width: min(100%, 480px);
-    min-height: 220px;
-    border-radius: 22px;
-    padding: 36px 28px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 26px;
-    text-align: center;
-    box-sizing: border-box;
-  }
-
-  &__modal-text {
-    margin: 0;
-    font-size: 2.2rem;
-    font-weight: 700;
-    line-height: 1.3;
-  }
-
-  &__modal-actions {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  &__result {
-    position: fixed;
-    inset: 0;
-    z-index: 999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &__result-box {
-    width: 100vw;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    padding: 60px 24px;
-    text-align: center;
-    box-sizing: border-box;
-  }
-
-  &__result-title {
-    margin: 0;
-    font-size: clamp(5rem, 8vw, 8rem);
-    line-height: 1;
-    font-weight: 800;
-  }
-
-  &__result-subtitle {
-    margin: 0;
-    font-size: 2rem;
-    font-weight: 700;
-  }
-
-  &__result-score {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    font-size: 2.2rem;
-    font-weight: 700;
-    padding: 10px 16px;
-    border-radius: 12px;
-  }
-
-  &__result-icon {
-    width: 24px;
-    height: 24px;
-    object-fit: contain;
-  }
-
-  &__winner-subtitle {
-    margin: 0;
-    font-size: 2rem;
-    font-weight: 700;
-  }
-
-  &__winner-title {
-    margin: 0;
-    font-size: clamp(4rem, 7vw, 6.8rem);
-    line-height: 1;
-    font-weight: 800;
-  }
-
-  &__winner-icon {
-    width: min(220px, 30vw);
-    height: auto;
-    object-fit: contain;
-    display: block;
-    padding: 18px;
-  }
-}
-
-@media (max-width: 800px) {
-  .hero {
-    padding: 40px 24px;
-
-    &__overlay {
-      margin-left: 0;
-    }
-
-    &__bg-icon {
-      width: 220px;
-    }
-  }
-
-  .settings {
-    padding: 40px 24px;
-    flex-direction: column;
-    gap: 28px;
-
-    &__left {
-      max-width: none;
-      width: 100%;
-      padding-left: 0;
-    }
-
-    &__right {
-      width: 100%;
-      margin-top: 0;
-      justify-content: flex-start;
-      align-items: flex-start;
-      padding-right: 0px;
-    }
-
-    &__panel {
-      width: 100%;
-      max-width: 420px;
-      align-items: flex-start;
-    }
-
-    &__preview {
-      display: none;
-    }
-
-    &__summary {
-      width: 100%;
-      min-height: auto;
-      border-radius: 6px;
-      background: #ebe7e1;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 16px;
-      margin-top: -175px;
-    }
-
-    &__summary-info {
-      width: 100%;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 10px;
-
-      span {
-        font-size: 1rem;
-        line-height: 1.2;
-        white-space: normal;
-        color: #2f2f2f;
-      }
-    }
-
-    &__divider {
-      width: 18px;
-      height: 24px;
-      flex-shrink: 0;
-    }
-  }
-
-  .settings__start {
-    margin-left: 0;
-    align-self: flex-start;
-  }
-
-  .game {
-    padding: 40px 24px;
-
-    &__board {
-      grid-template-columns: repeat(4, minmax(60px, 1fr));
-    }
-  }
-
-  .card {
-    width: 100%;
-  }
-}
-
-
-@media (max-width: 950px) {
-  .settings__summary {
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: 16px;
-  }
-
-  .settings__summary-info {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .settings__divider {
-    display: none;
-  }
-
-  .settings__start {
-    margin-left: 0;
-    align-self: flex-start;
-  }
-}
-
-@media (max-width: 950px) {
-  .settings__right {
-    margin-top: 24px;
-  }
-
-  .settings__panel {
-    max-width: 100%;
-  }
-
-  .settings__summary {
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: 14px;
-  }
-
-  .settings__summary-info {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .settings__divider {
-    display: block;
-    width: 40px;
-    height: 28px;
-    transform: rotate(90deg);
-  }
-
-  .settings__start {
-    align-self: flex-start;
-    margin-left: 0;
   }
 }
