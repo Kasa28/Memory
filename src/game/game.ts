@@ -1,24 +1,40 @@
 import { renderBoard } from "./board";
+import { initGameState, switchPlayer, addPoint } from "./state";
 import {
-  initGameState,
-  switchPlayer,
-  addPoint,
-  getWinner,
-  updateWinnerDisplay,
-  updateResultDisplay
-} from "./state";
+  setupExitGame,
+  setupWinnerHome,
+  closeExitModal,
+  hideResultScreens,
+  showGameEndScreen,
+  updateGameTheme
+} from "./gameUi";
+
+const UNFLIP_DELAY = 900;
+const END_DELAY = 1000;
+const MATCHED_CLASS = "matched";
+const FLIPPED_CLASS = "is-flipped";
 
 let firstCard: HTMLButtonElement | null = null;
 let secondCard: HTMLButtonElement | null = null;
 let lockBoard = false;
 
+/**
+ * Initializes all game events.
+ *
+ * @returns {void}
+ */
 export function initGame(): void {
   setupCardFlip();
-  setupExitGame();
-  setupWinnerHome();
+  setupExitGame(resetGameBoard);
+  setupWinnerHome(resetGameBoard);
   window.addEventListener("start-memory-game", startGame);
 }
 
+/**
+ * Starts a new game.
+ *
+ * @returns {void}
+ */
 function startGame(): void {
   resetTurn();
   initGameState();
@@ -28,12 +44,23 @@ function startGame(): void {
   hideResultScreens();
 }
 
+/**
+ * Sets up board click handling.
+ *
+ * @returns {void}
+ */
 function setupCardFlip(): void {
   const field = document.getElementById("field");
   if (!field) return;
   field.addEventListener("click", handleCardClick);
 }
 
+/**
+ * Handles card click events.
+ *
+ * @param {Event} e
+ * @returns {void}
+ */
 function handleCardClick(e: Event): void {
   const target = e.target as HTMLElement;
   const card = target.closest(".card") as HTMLButtonElement | null;
@@ -43,176 +70,106 @@ function handleCardClick(e: Event): void {
   checkTurn();
 }
 
+/**
+ * Checks whether a card can be clicked.
+ *
+ * @param {HTMLButtonElement} card
+ * @returns {boolean}
+ */
 function isCardClickable(card: HTMLButtonElement): boolean {
-  return !lockBoard && card !== firstCard && !card.classList.contains("matched");
+  return !lockBoard && card !== firstCard && !card.classList.contains(MATCHED_CLASS);
 }
 
+/**
+ * Flips a card visually.
+ *
+ * @param {HTMLButtonElement} card
+ * @returns {void}
+ */
 function flipCard(card: HTMLButtonElement): void {
-  card.classList.add("is-flipped");
+  card.classList.add(FLIPPED_CLASS);
 }
 
+/**
+ * Saves the clicked card in the current turn.
+ *
+ * @param {HTMLButtonElement} card
+ * @returns {void}
+ */
 function saveCard(card: HTMLButtonElement): void {
   if (!firstCard) {
     firstCard = card;
     return;
   }
+
   secondCard = card;
   lockBoard = true;
 }
 
+/**
+ * Checks the current turn result.
+ *
+ * @returns {void}
+ */
 function checkTurn(): void {
   if (!firstCard || !secondCard) return;
   isMatch() ? keepMatch() : unflipCards();
 }
 
+/**
+ * Checks if both selected cards match.
+ *
+ * @returns {boolean}
+ */
 function isMatch(): boolean {
   return firstCard?.dataset.card === secondCard?.dataset.card;
 }
 
+/**
+ * Keeps matching cards open and updates score.
+ *
+ * @returns {void}
+ */
 function keepMatch(): void {
-  firstCard?.classList.add("matched");
-  secondCard?.classList.add("matched");
+  firstCard?.classList.add(MATCHED_CLASS);
+  secondCard?.classList.add(MATCHED_CLASS);
   addPoint();
   resetTurn();
   checkGameEnd();
 }
 
+/**
+ * Flips both cards back after delay.
+ *
+ * @returns {void}
+ */
 function unflipCards(): void {
   setTimeout(() => {
-    firstCard?.classList.remove("is-flipped");
-    secondCard?.classList.remove("is-flipped");
+    firstCard?.classList.remove(FLIPPED_CLASS);
+    secondCard?.classList.remove(FLIPPED_CLASS);
     switchPlayer();
     resetTurn();
-  }, 900);
+  }, UNFLIP_DELAY);
 }
 
+/**
+ * Checks whether the game is finished.
+ *
+ * @returns {void}
+ */
 function checkGameEnd(): void {
   const matched = document.querySelectorAll(".card.matched");
   const size = Number(getCheckedValue("size"));
   if (matched.length !== size) return;
   lockBoard = true;
-  setTimeout(showEndFlow, 1000);
+  setTimeout(showGameEndScreen, END_DELAY);
 }
 
-function showEndFlow(): void {
-  showGameEndScreen();
-}
-
-function showGameEndScreen(): void {
-  updateResultDisplay();
-  document.getElementById("gameEndScreen")?.classList.remove("is-hidden");
-
-  setTimeout(() => {
-    document.getElementById("gameEndScreen")?.classList.add("is-hidden");
-    showWinner();
-  }, 5000);
-}
-
-function showWinner(): void {
-  updateWinnerDisplay();
-  toggleWinnerLayout();
-  fillWinnerVisuals();
-  document.getElementById("winnerScreen")?.classList.remove("is-hidden");
-}
-
-function fillWinnerVisuals(): void {
-  toggleWinnerTrophy();
-  fillFoodsWinnerIcons();
-  setWinnerColors();
-}
-
-function toggleWinnerLayout(): void {
-  const box = document.getElementById("winnerBox");
-  if (!box) return;
-  box.classList.toggle("winner-box--foods", isFoodsTheme());
-  box.classList.toggle("winner-box--gaming", isGamingTheme());
-  box.classList.toggle("winner-box--draw", getWinner() === "draw");
-}
-
-function toggleWinnerTrophy(): void {
-  const trophy = document.getElementById("winnerTrophyIcon");
-  if (!trophy) return;
-  trophy.classList.toggle("is-hidden", !isGamingTheme());
-}
-
-function fillFoodsWinnerIcons(): void {
-  showWinnerIcon("winnerBlueIcon", isFoodsTheme() && shouldShowBlue());
-  showWinnerIcon("winnerOrangeIcon", isFoodsTheme() && shouldShowOrange());
-}
-
-function shouldShowBlue(): boolean {
-  const winner = getWinner();
-  return winner === "blue" || winner === "draw";
-}
-
-function shouldShowOrange(): boolean {
-  const winner = getWinner();
-  return winner === "orange" || winner === "draw";
-}
-
-function showWinnerIcon(id: string, show: boolean): void {
-  const img = document.getElementById(id) as HTMLImageElement | null;
-  if (!img) return;
-  img.classList.toggle("is-hidden", !show);
-}
-
-function setWinnerColors(): void {
-  const title = document.getElementById("winnerTitle");
-  if (!title) return;
-
-  title.classList.remove(
-    "winner-title--blue",
-    "winner-title--orange",
-    "winner-title--draw"
-  );
-
-  const winner = getWinner();
-  if (winner === "blue") title.classList.add("winner-title--blue");
-  if (winner === "orange") title.classList.add("winner-title--orange");
-  if (winner === "draw") title.classList.add("winner-title--draw");
-}
-
-function setupExitGame(): void {
-  const exit = document.getElementById("exitGameBtn");
-  const cancel = document.getElementById("cancelExitBtn");
-  const confirm = document.getElementById("confirmExitBtn");
-  if (!exit || !cancel || !confirm) return;
-  exit.addEventListener("click", openExitModal);
-  cancel.addEventListener("click", closeExitModal);
-  confirm.addEventListener("click", quitGame);
-}
-
-function openExitModal(): void {
-  document.getElementById("exitModal")?.classList.remove("is-hidden");
-}
-
-function closeExitModal(): void {
-  document.getElementById("exitModal")?.classList.add("is-hidden");
-}
-
-function quitGame(): void {
-  closeExitModal();
-  resetGameBoard();
-  showSettings();
-}
-
-function showSettings(): void {
-  document.getElementById("game")?.classList.add("is-hidden");
-  document.getElementById("settings")?.classList.remove("is-hidden");
-}
-
-function setupWinnerHome(): void {
-  const btn = document.getElementById("winnerHomeBtn");
-  if (!btn) return;
-  btn.addEventListener("click", goHome);
-}
-
-function goHome(): void {
-  resetGameBoard();
-  document.getElementById("game")?.classList.add("is-hidden");
-  document.getElementById("hero")?.classList.remove("is-hidden");
-}
-
+/**
+ * Resets the game board state.
+ *
+ * @returns {void}
+ */
 function resetGameBoard(): void {
   const field = document.getElementById("field");
   if (field) field.innerHTML = "";
@@ -221,35 +178,23 @@ function resetGameBoard(): void {
   closeExitModal();
 }
 
+/**
+ * Resets the current turn state.
+ *
+ * @returns {void}
+ */
 function resetTurn(): void {
   firstCard = null;
   secondCard = null;
   lockBoard = false;
 }
 
-function hideResultScreens(): void {
-  document.getElementById("gameEndScreen")?.classList.add("is-hidden");
-  document.getElementById("winnerScreen")?.classList.add("is-hidden");
-}
-
-function updateGameTheme(): void {
-  const game = document.getElementById("game");
-  const theme = getCheckedValue("theme");
-  if (!game) return;
-
-  game.classList.remove("theme-gaming-board", "theme-foods-board");
-  if (theme === "gaming") game.classList.add("theme-gaming-board");
-  if (theme === "foods") game.classList.add("theme-foods-board");
-}
-
-function isFoodsTheme(): boolean {
-  return getCheckedValue("theme") === "foods";
-}
-
-function isGamingTheme(): boolean {
-  return getCheckedValue("theme") === "gaming";
-}
-
+/**
+ * Returns the checked value of a radio group.
+ *
+ * @param {string} name
+ * @returns {string}
+ */
 function getCheckedValue(name: string): string {
   const input = document.querySelector<HTMLInputElement>(
     `input[name="${name}"]:checked`

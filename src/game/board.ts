@@ -1,3 +1,6 @@
+import { getCardTemplate } from "./boardTemplate";
+
+const BASE_URL = import.meta.env.BASE_URL;
 const THEMES: Record<string, string[]> = {
   foods: [
     "brezel.svg",
@@ -17,7 +20,7 @@ const THEMES: Record<string, string[]> = {
     "panna.svg",
     "macarons.svg",
     "ice.svg",
-    "donut.svg",
+    "donut.svg"
   ],
   gaming: [
     "2.svg",
@@ -38,10 +41,20 @@ const THEMES: Record<string, string[]> = {
     "17.svg",
     "18.svg",
     "19.svg",
-    "fronds.svg",
-  ],
+    "fronds.svg"
+  ]
 };
 
+const CARD_BACKS: Record<string, string> = {
+  gaming: `${BASE_URL}cards/gaming/back.svg`,
+  foods: `${BASE_URL}cards/foods/back.svg`
+};
+
+/**
+ * Renders the game board.
+ *
+ * @returns {void}
+ */
 export function renderBoard(): void {
   const fieldRef = document.getElementById("field");
   const theme = getCheckedValue("theme");
@@ -51,51 +64,48 @@ export function renderBoard(): void {
   fieldRef.innerHTML = cards.map((card) => getCardTemplate(theme, card)).join("");
 }
 
+/**
+ * Creates the shuffled card list.
+ *
+ * @returns {string[]}
+ */
 function createCards(): string[] {
   const theme = getCheckedValue("theme");
   const size = Number(getCheckedValue("size"));
   const images = THEMES[theme];
 
   if (!images || !size) return [];
-
   const pairs = size / 2;
   const selected = images.slice(0, pairs);
   return shuffleCards([...selected, ...selected]);
 }
 
+/**
+ * Shuffles the cards.
+ *
+ * @param {string[]} cards
+ * @returns {string[]}
+ */
 function shuffleCards(cards: string[]): string[] {
   return [...cards].sort(() => Math.random() - 0.5);
 }
 
-function getCardBackImage(theme: string): string {
-  const base = import.meta.env.BASE_URL;
-  const backs: Record<string, string> = {
-    gaming: `${base}cards/gaming/back.svg`,
-    foods: `${base}cards/foods/back.svg`,
-  };
-
-  return backs[theme] || "";
+/**
+ * Returns the card back image path for a theme.
+ *
+ * @param {string} theme
+ * @returns {string}
+ */
+export function getCardBackImage(theme: string): string {
+  return CARD_BACKS[theme] || "";
 }
 
-function getCardTemplate(theme: string, card: string): string {
-  const base = import.meta.env.BASE_URL;
-  const frontImagePath = getCardBackImage(theme);
-  const backImagePath = `${base}cards/${theme}/${card}`;
-
-  return `
-    <button class="card" data-card="${card}">
-      <div class="card__inner">
-        <div class="card__face card__face--front">
-          <img src="${frontImagePath}" alt="card back">
-        </div>
-        <div class="card__face card__face--back">
-          <img src="${backImagePath}" alt="${card}">
-        </div>
-      </div>
-    </button>
-  `;
-}
-
+/**
+ * Returns the checked value of a radio group.
+ *
+ * @param {string} name
+ * @returns {string}
+ */
 function getCheckedValue(name: string): string {
   const checked = document.querySelector<HTMLInputElement>(
     `input[name="${name}"]:checked`
