@@ -128,3 +128,64 @@
     width: 100%;
   }
 }
+
+@media (max-width: 1100px) {
+  .hero {
+    padding: 80px 60px;
+
+    &__overlay {
+      max-width: 820px;
+    }
+
+    &__text,
+    &__title {
+      max-width: 700px;
+    }
+
+    &__title {
+      font-size: clamp(2.4rem, 6.8vw, 6rem);
+    }
+  }
+}
+
+@media (max-width: 800px) {
+  .hero {
+    padding: 48px 24px;
+
+    &__overlay {
+      align-items: center;
+    }
+
+    &__text,
+    &__title {
+      max-width: 100%;
+    }
+
+    &__text {
+      font-size: 1.35rem;
+    }
+
+    &__title {
+      font-size: clamp(2.2rem, 8vw, 4.8rem);
+      line-height: 1;
+    }
+
+    &__bg-icon {
+      width: 220px;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .hero {
+    &__text {
+      font-size: 1.15rem;
+      margin-bottom: 16px;
+    }
+
+    &__title {
+      font-size: clamp(1.9rem, 7.2vw, 3.6rem);
+      margin-bottom: 28px;
+    }
+  }
+}

@@ -13,6 +13,7 @@
   overflow: hidden;
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 80px 120px;
   background-color: #303131;
   background-repeat: no-repeat;
@@ -22,24 +23,35 @@
   &__overlay {
     width: 100%;
     max-width: 980px;
-    margin-left: 240px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
   }
 
   &__text {
-    font-size: 1.9rem;
-    color: #f8f6ef;
+    width: 100%;
+    max-width: 780px;
     margin-bottom: 20px;
+    color: #f8f6ef;
+    font-size: 1.9rem;
+    text-align: left;
   }
 
   &__title {
+    width: 100%;
     max-width: 780px;
-    font-size: clamp(5.2rem, 7vw, 7.4rem);
-    line-height: 0.95;
-    color: #f8f6ef;
     margin-bottom: 40px;
+    color: #f8f6ef;
+    font-size: clamp(2.4rem, 7vw, 7.4rem);
+    line-height: 0.95;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  &__button {
+    align-self: center;
+    margin-top: 0;
+    margin-left: 0;
   }
 
   &__bg-icon {
